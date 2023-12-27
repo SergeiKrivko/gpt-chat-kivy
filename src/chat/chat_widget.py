@@ -114,8 +114,8 @@ class ChatWidget(MDScreen):
             # for el in simple_response(messages):
             #     bubble.add_text(el)
             bubble.add_text(simple_response(messages))
-        except Exception:
-            pass
+        except Exception as ex:
+            bubble.add_text(f"{ex.__class__.__name__}: {ex}")
 
 
 class CustomScrollView(MDScrollView):
