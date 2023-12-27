@@ -7,7 +7,7 @@ from .Provider   import (
     ChatgptDemoAi,
     ChatAnywhere,
     ChatgptNext,
-    HuggingChat,
+    # HuggingChat,
     GptForLove,
     ChatgptAi,
     DeepInfra,
@@ -26,7 +26,7 @@ from .Provider   import (
     # Bard,
     Bing,
     You,
-    H2o,
+    # H2o,
     Pi,
 )
 
@@ -107,18 +107,18 @@ llama2_13b = Model(
 llama2_70b = Model(
     name          = "meta-llama/Llama-2-70b-chat-hf",
     base_provider = "huggingface",
-    best_provider = RetryProvider([Llama2, DeepInfra, HuggingChat]))
+    best_provider = RetryProvider([Llama2, DeepInfra]))
 
 # Mistal
-mixtral_8x7b = Model(
-    name          = "mistralai/Mixtral-8x7B-Instruct-v0.1",
-    base_provider = "huggingface",
-    best_provider = HuggingChat)
-
-mistral_7b = Model(
-    name          = "mistralai/Mistral-7B-Instruct-v0.1",
-    base_provider = "huggingface",
-    best_provider = HuggingChat)
+# mixtral_8x7b = Model(
+#     name          = "mistralai/Mixtral-8x7B-Instruct-v0.1",
+#     base_provider = "huggingface",
+#     best_provider = HuggingChat)
+#
+# mistral_7b = Model(
+#     name          = "mistralai/Mistral-7B-Instruct-v0.1",
+#     base_provider = "huggingface",
+#     best_provider = HuggingChat)
 
 # Bard
 # palm = Model(
@@ -127,20 +127,20 @@ mistral_7b = Model(
 #     best_provider = Bard)
 
 # H2o
-falcon_7b = Model(
-    name          = 'h2oai/h2ogpt-gm-oasst1-en-2048-falcon-7b-v3',
-    base_provider = 'huggingface',
-    best_provider = H2o)
-
-falcon_40b = Model(
-    name          = 'h2oai/h2ogpt-gm-oasst1-en-2048-falcon-40b-v1',
-    base_provider = 'huggingface',
-    best_provider = H2o)
-
-llama_13b = Model(
-    name          = 'h2oai/h2ogpt-gm-oasst1-en-2048-open-llama-13b',
-    base_provider = 'huggingface',
-    best_provider = H2o)
+# falcon_7b = Model(
+#     name          = 'h2oai/h2ogpt-gm-oasst1-en-2048-falcon-7b-v3',
+#     base_provider = 'huggingface',
+#     best_provider = H2o)
+#
+# falcon_40b = Model(
+#     name          = 'h2oai/h2ogpt-gm-oasst1-en-2048-falcon-40b-v1',
+#     base_provider = 'huggingface',
+#     best_provider = H2o)
+#
+# llama_13b = Model(
+#     name          = 'h2oai/h2ogpt-gm-oasst1-en-2048-open-llama-13b',
+#     base_provider = 'huggingface',
+#     best_provider = H2o)
 
 # Vercel
 claude_instant_v1 = Model(
@@ -307,8 +307,8 @@ class ModelUtils:
         'llama2-70b': llama2_70b,
         
         # Mistral
-        'mixtral-8x7b': mixtral_8x7b,
-        'mistral-7b': mistral_7b,
+        # 'mixtral-8x7b': mixtral_8x7b,
+        # 'mistral-7b': mistral_7b,
         
         # Bard
         # 'palm2'       : palm,
@@ -319,9 +319,9 @@ class ModelUtils:
         # 'bard'        : palm,
         
         # H2o
-        'falcon-40b' : falcon_40b,
-        'falcon-7b'  : falcon_7b,
-        'llama-13b'  : llama_13b,
+        # 'falcon-40b' : falcon_40b,
+        # 'falcon-7b'  : falcon_7b,
+        # 'llama-13b'  : llama_13b,
         
         # Vercel
         #'claude-instant-v1' : claude_instant_v1,

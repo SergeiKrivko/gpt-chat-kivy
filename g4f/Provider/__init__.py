@@ -2,16 +2,16 @@ from __future__ import annotations
 
 from .base_provider  import BaseProvider, AsyncProvider, AsyncGeneratorProvider
 from .retry_provider import RetryProvider
-from .deprecated     import *
-from .needs_auth     import *
-from .unfinished     import *
-from .selenium       import *
+# from .deprecated     import *
+# from .needs_auth     import *
+# from .unfinished     import *
+# from .selenium       import *
 from .Aura            import Aura
 from .AiAsk           import AiAsk
 from .Aichat          import Aichat
 from .AiChatOnline    import AiChatOnline
 from .AItianhu        import AItianhu
-from .AItianhuSpace   import AItianhuSpace
+# from .AItianhuSpace   import AItianhuSpace
 from .Berlin          import Berlin
 from .Bing            import Bing
 from .ChatAnywhere    import ChatAnywhere
@@ -29,7 +29,7 @@ from .DeepInfra       import DeepInfra
 from .FakeGpt         import FakeGpt
 from .FreeGpt         import FreeGpt
 from .GPTalk          import GPTalk
-from .GptChatly       import GptChatly
+# from .GptChatly       import GptChatly
 from .GptForLove      import GptForLove
 from .GptGo           import GptGo
 from .GptGod          import GptGod
@@ -38,13 +38,13 @@ from .Hashnode        import Hashnode
 from .Koala           import Koala
 from .Liaobots        import Liaobots
 from .Llama2          import Llama2
-from .MyShell         import MyShell
+# from .MyShell         import MyShell
 from .OnlineGpt       import OnlineGpt
 from .Opchatgpts      import Opchatgpts
-from .PerplexityAi    import PerplexityAi
+# from .PerplexityAi    import PerplexityAi
 from .Phind           import Phind
-from .Pi              import Pi
-from .TalkAi          import TalkAi
+# from .Pi              import Pi
+# from .TalkAi          import TalkAi
 from .Vercel          import Vercel
 from .Ylokh           import Ylokh
 from .You             import You
