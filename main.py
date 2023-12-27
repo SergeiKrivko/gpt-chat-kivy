@@ -1,8 +1,15 @@
-from kivy.uix.boxlayout import BoxLayout
-from kivymd.app import MDApp
+from kivymd.uix.label import MDLabel
 
-from src import config
-from src.chat import ChatPanel
+try:
+    from kivy.uix.boxlayout import BoxLayout
+    from kivymd.app import MDApp
+
+    from src import config
+    from src.chat import ChatPanel
+except Exception as ex:
+    error = f"{ex.__class__.__name__}: {ex}"
+else:
+    error = ''
 
 
 class MainApp(MDApp):
@@ -13,8 +20,18 @@ class MainApp(MDApp):
 
         self.title = config.APP_NAME
 
-        self.main_widget = ChatPanel(self)
-        main_layout.add_widget(self.main_widget)
+        global error
+
+        if not error:
+            try:
+                self.main_widget = ChatPanel(self)
+            except Exception as ex:
+                error = f"{ex.__class__.__name__}: {ex}"
+
+        if error:
+            main_layout.add_widget(MDLabel(text=error))
+        else:
+            main_layout.add_widget(self.main_widget)
 
         return main_layout
 
@@ -22,4 +39,4 @@ class MainApp(MDApp):
 if __name__ == "__main__":
     app = MainApp()
     app.run()
-    app.main_widget.db.close()
+    # app.main_widget.db.close()

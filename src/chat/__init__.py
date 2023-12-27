@@ -9,7 +9,7 @@ from kivymd.uix.screenmanager import MDScreenManager
 from src.chat.chat_list import ChatsList, ChatListWidgetItem
 from src.chat.chat_widget import ChatWidget
 from src.gpt.chat import GPTChat
-from src.gpt.database import Database
+# from src.gpt.database import Database
 from src.ui.main_settings_screen import MainSettingsScreen
 
 
@@ -23,7 +23,7 @@ class ChatPanel(BoxLayout):
         else:
             app_data_dir = app.user_data_dir
 
-        self.db = Database(app_data_dir)
+        # self.db = Database(app_data_dir)
 
         self._screen_manager = MDScreenManager()
         self.add_widget(self._screen_manager)
@@ -41,8 +41,8 @@ class ChatPanel(BoxLayout):
         self.chat_widgets = dict()
         self.current_chat: int | None = None
 
-        for chat in self.db.chats:
-            self.add_chat(chat)
+        # for chat in self.db.chats:
+        #     self.add_chat(chat)
 
     def add_chat(self, chat: GPTChat):
         widget = ChatWidget(self.app, chat)

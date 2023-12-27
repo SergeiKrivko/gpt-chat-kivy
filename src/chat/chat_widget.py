@@ -12,7 +12,7 @@ from kivymd.uix.toolbar import MDTopAppBar
 from kivymd.uix.snackbar import Snackbar
 
 from src.chat.chat_bubble import ChatBubble
-from src.gpt import stream_response
+# from src.gpt import stream_response
 from src.gpt.chat import GPTChat
 from src.gpt.message import GPTMessage
 

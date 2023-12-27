@@ -1,3 +1,4 @@
+import os
 import sqlite3
 from time import time
 
@@ -7,8 +8,11 @@ from src.gpt import chat
 class Database:
     def __init__(self, data_dir):
         self._data_dir = data_dir
-        # os.makedirs(self._sm.app_data_dir, exist_ok=True)
-        self._connection = sqlite3.connect(f"{self._data_dir}/database.db")
+        try:
+            self._connection = sqlite3.connect(f"{self._data_dir}/database.db")
+        except FileNotFoundError:
+            os.makedirs(data_dir)
+            self._connection = sqlite3.connect(f"{self._data_dir}/database.db")
         # self._connection = sqlite3.connect(r"database.db")
 
         self.cursor = self._connection.cursor()
