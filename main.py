@@ -39,4 +39,4 @@ class MainApp(MDApp):
 if __name__ == "__main__":
     app = MainApp()
     app.run()
-    # app.main_widget.db.close()
+    app.main_widget.db.close()

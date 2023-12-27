@@ -32,8 +32,8 @@ class ChatWidget(MDScreen):
 
         self.scroll_layout = MDBoxLayout(orientation='vertical')
         self.scroll_layout.size_hint_y = None
-        self.scroll_layout.padding = 10
-        self.scroll_layout.spacing = 10
+        self.scroll_layout.padding = 25
+        self.scroll_layout.spacing = 20
         self.scroll_layout.bind(minimum_height=self._on_resize)
         self.scroll_view.add_widget(self.scroll_layout)
         self.scroll_view.on_scroll = self.on_scroll
@@ -44,8 +44,8 @@ class ChatWidget(MDScreen):
         self._last_height = 0
 
         bottom_layout = MDBoxLayout(size_hint_y=None, adaptive_height=True)
-        bottom_layout.padding = 10
-        bottom_layout.spacing = 8
+        bottom_layout.padding = 25
+        bottom_layout.spacing = 15
         main_layout.add_widget(bottom_layout)
 
         self.input_area = MDTextField(
