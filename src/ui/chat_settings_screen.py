@@ -22,7 +22,7 @@ class ChatSettingsScreen(MDScreen):
         main_layout.add_widget(self.top_bar)
 
         layout = MDBoxLayout(orientation='vertical', adaptive_height=True)
-        layout.padding = (40, 20, 40, 40)
+        layout.padding = 40
         layout.spacing = 15
         main_layout.add_widget(layout)
 

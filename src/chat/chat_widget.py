@@ -44,7 +44,7 @@ class ChatWidget(MDScreen):
         self._last_height = 0
 
         bottom_layout = MDBoxLayout(size_hint_y=None, adaptive_height=True)
-        bottom_layout.padding = 25
+        bottom_layout.padding = (25, 25, 25, 50)
         bottom_layout.spacing = 15
         main_layout.add_widget(bottom_layout)
 
