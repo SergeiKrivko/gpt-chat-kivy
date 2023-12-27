@@ -4,8 +4,6 @@ try:
     from kivy.uix.boxlayout import BoxLayout
     from kivymd.app import MDApp
 
-    from src import config
-    from src.chat import ChatPanel
 except Exception as ex:
     error = f"{ex.__class__.__name__}: {ex}"
 else:
@@ -18,20 +16,15 @@ class MainApp(MDApp):
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "Green"
 
-        self.title = config.APP_NAME
-
         global error
 
         if not error:
             try:
-                self.main_widget = ChatPanel(self)
+                error = 'Success'
             except Exception as ex:
                 error = f"{ex.__class__.__name__}: {ex}"
 
-        if error:
-            main_layout.add_widget(MDLabel(text=error))
-        else:
-            main_layout.add_widget(self.main_widget)
+        main_layout.add_widget(MDLabel(text=error))
 
         return main_layout
 
