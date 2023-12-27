@@ -10,6 +10,7 @@ from src.chat.chat_list import ChatsList, ChatListWidgetItem
 from src.chat.chat_widget import ChatWidget
 from src.gpt.chat import GPTChat
 from src.gpt.database import Database
+from src.ui.chat_settings_screen import ChatSettingsScreen
 from src.ui.main_settings_screen import MainSettingsScreen
 
 
@@ -41,8 +42,12 @@ class ChatPanel(BoxLayout):
         self.settings_screen.on_closed = self.close_settings
         self._screen_manager.add_widget(self.settings_screen)
 
+        self.chat_settings_screen = ChatSettingsScreen(self.app)
+        self.chat_settings_screen.on_closed = self.close_chat_settings
+        self._screen_manager.add_widget(self.chat_settings_screen)
+
         self.chat_widgets = dict()
-        self.current_chat: int | None = None
+        self.current_chat: GPTChat | None = None
 
         for chat in self.db.chats:
             self.add_chat(chat)
@@ -50,6 +55,7 @@ class ChatPanel(BoxLayout):
     def add_chat(self, chat: GPTChat):
         widget = ChatWidget(self.app, chat)
         widget.top_panel.on_chat_closed = self.hide_chat
+        widget.top_panel.on_settings_clicked = self.open_chat_settings
         self._screen_manager.add_widget(widget)
         item = self.chat_list.add_item(chat)
         item.on_clicked = self._on_list_widget_item_clicked
@@ -70,7 +76,7 @@ class ChatPanel(BoxLayout):
         self._screen_manager.transition.direction = 'left'
         self._screen_manager.current = f'Chat{chat.id}'
         self.chat_widgets[chat.id].load_messages()
-        self.current_chat = chat.id
+        self.current_chat = chat
 
     def hide_chat(self):
         if self.current_chat is None:
@@ -78,6 +84,7 @@ class ChatPanel(BoxLayout):
         self._screen_manager.transition.direction = 'right'
         self._screen_manager.current = 'Chats'
         self.current_chat = None
+        self.db.save_chats()
 
     def open_settings(self):
         self._screen_manager.transition.direction = 'left'
@@ -86,4 +93,14 @@ class ChatPanel(BoxLayout):
     def close_settings(self):
         self._screen_manager.transition.direction = 'right'
         self._screen_manager.current = 'Chats'
+
+    def open_chat_settings(self):
+        self._screen_manager.transition.direction = 'left'
+        self._screen_manager.current = 'ChatSettings'
+        self.chat_settings_screen.open_chat(self.current_chat)
+
+    def close_chat_settings(self):
+        self._screen_manager.transition.direction = 'right'
+        self._screen_manager.current = f'Chat{self.current_chat.id}'
+        self.chat_settings_screen.save_chat()
 

@@ -81,9 +81,12 @@ class Database:
     def delete_message_to_save(self, message):
         self._messages_to_save.remove(message)
 
-    def close(self):
+    def save_chats(self):
         for el in self._messages_to_save.copy():
             el.save_content()
+
+    def close(self):
+        self.save_chats()
         self._connection.commit()
         self._connection.close()
 

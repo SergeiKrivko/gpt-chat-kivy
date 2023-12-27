@@ -130,7 +130,7 @@ class ChatTopPanel(MDTopAppBar):
         super().__init__()
         self.title = chat.name if chat.name else 'Chat'
         self.left_action_items = [['arrow-left', self.close_chat]]
-        self.right_action_items = [['dots-horizontal', lambda x: x]]
+        self.right_action_items = [['dots-horizontal', lambda x: self.on_settings_clicked()]]
 
         self.on_chat_closed = None
 

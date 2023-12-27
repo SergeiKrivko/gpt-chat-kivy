@@ -20,7 +20,7 @@ class MainSettingsScreen(MDScreen):
         main_layout.add_widget(self.top_bar)
 
         layout = MDBoxLayout(orientation='vertical')
-        layout.padding = 10
+        layout.padding = 25
         main_layout.add_widget(layout)
 
         self.dark_theme_item = SwitchItem("Dark theme")
