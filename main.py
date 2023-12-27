@@ -1,13 +1,7 @@
 from kivymd.uix.label import MDLabel
 
-try:
-    from kivy.uix.boxlayout import BoxLayout
-    from kivymd.app import MDApp
-
-except Exception as ex:
-    error = f"{ex.__class__.__name__}: {ex}"
-else:
-    error = ''
+from kivy.uix.boxlayout import BoxLayout
+from kivymd.app import MDApp
 
 
 class MainApp(MDApp):
@@ -16,15 +10,7 @@ class MainApp(MDApp):
         # self.theme_cls.theme_style = "Dark"
         # self.theme_cls.primary_palette = "Green"
 
-        global error
-
-        if not error:
-            try:
-                error = 'Success'
-            except Exception as ex:
-                error = f"{ex.__class__.__name__}: {ex}"
-
-        main_layout.add_widget(MDLabel(text=error))
+        main_layout.add_widget(MDLabel(text='Hello World'))
 
         return main_layout
 
