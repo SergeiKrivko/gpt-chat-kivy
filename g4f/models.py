@@ -23,7 +23,7 @@ from .Provider   import (
     Phind,
     Koala,
     GptGo,
-    Bard, 
+    # Bard,
     Bing,
     You,
     H2o,
@@ -121,10 +121,10 @@ mistral_7b = Model(
     best_provider = HuggingChat)
 
 # Bard
-palm = Model(
-    name          = 'palm',
-    base_provider = 'google',
-    best_provider = Bard)
+# palm = Model(
+#     name          = 'palm',
+#     base_provider = 'google',
+#     best_provider = Bard)
 
 # H2o
 falcon_7b = Model(
@@ -311,12 +311,12 @@ class ModelUtils:
         'mistral-7b': mistral_7b,
         
         # Bard
-        'palm2'       : palm,
-        'palm'        : palm,
-        'google'      : palm,
-        'google-bard' : palm,
-        'google-palm' : palm,
-        'bard'        : palm,
+        # 'palm2'       : palm,
+        # 'palm'        : palm,
+        # 'google'      : palm,
+        # 'google-bard' : palm,
+        # 'google-palm' : palm,
+        # 'bard'        : palm,
         
         # H2o
         'falcon-40b' : falcon_40b,

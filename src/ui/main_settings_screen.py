@@ -35,7 +35,3 @@ class MainSettingsScreen(MDScreen):
     def set_dark_theme(self, dark):
         # self.app.theme_cls.theme_style = 'Dark' if dark else 'Light'
         pass
-
-
-
-
