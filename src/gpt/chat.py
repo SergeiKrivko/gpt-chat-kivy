@@ -3,7 +3,7 @@ import struct
 import time
 from typing import Literal
 
-from src.gpt import database
+# from src.gpt import database
 from src.gpt.message import GPTMessage
 
 
@@ -12,7 +12,7 @@ class GPTChat:
     TRANSLATE = 1
     SUMMARY = 2
 
-    def __init__(self, db: database.Database, chat_id: int):
+    def __init__(self, db, chat_id: int):
         self._id = chat_id
         self._db = db
         self._deleted = False

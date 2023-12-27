@@ -1,10 +1,8 @@
 import struct
 
-from src.gpt import database
-
 
 class GPTMessage:
-    def __init__(self, db: database.Database, chat_id, message_id: int):
+    def __init__(self, db, chat_id, message_id: int):
         if not isinstance(message_id, int):
             raise TypeError(f"message_id must be int, not {message_id.__class__.__name__} ({message_id})")
         self._id = message_id

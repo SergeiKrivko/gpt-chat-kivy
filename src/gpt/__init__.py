@@ -1,4 +1,4 @@
-import g4f
+# import g4f
 
 
 def stream_response(messages: list[dict[str: str]], model=None, **kwargs):
