@@ -83,6 +83,7 @@ class ChatPanel(BoxLayout):
             return
         self._screen_manager.transition.direction = 'right'
         self._screen_manager.current = 'Chats'
+        self.chat_list.update_name(self.current_chat)
         self.current_chat = None
         self.db.save_chats()
 

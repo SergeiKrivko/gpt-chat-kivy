@@ -53,6 +53,7 @@ class ChatWidget(MDScreen):
             hint_text='Сообщение',
             mode="rectangle",
             size_hint_y=None,
+            padding=4,
         )
         bottom_layout.add_widget(self.input_area)
 

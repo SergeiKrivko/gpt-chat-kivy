@@ -27,11 +27,13 @@ class ChatsList(MDScreen):
         self.scroll_view.add_widget(self.list)
 
         self.on_chat_deleted = None
+        self._items = dict()
 
     def add_item(self, chat: GPTChat) -> 'ChatListWidgetItem':
         item = ChatListWidgetItem(self.app, chat)
         item.on_deleted = self.remove_item
         self.list.add_widget(item)
+        self._items[chat.id] = item
         return item
 
     def remove_item(self, item: 'ChatListWidgetItem'):
@@ -39,6 +41,10 @@ class ChatsList(MDScreen):
         item.chat.delete()
         if self.on_chat_deleted:
             self.on_chat_deleted(item.chat)
+        self._items.pop(item.chat.id)
+
+    def update_name(self, chat):
+        self._items[chat.id].update_name()
 
 
 class ChatListWidgetItem(MDCardSwipe):
@@ -57,13 +63,9 @@ class ChatListWidgetItem(MDCardSwipe):
         self.type_swipe = 'auto'
 
         self.chat = chat
-        name = chat.name
-        if not name:
-            if chat.last_message is None:
-                name = "<Новый диалог>"
-            else:
-                name = chat.last_message.content
-        self.list_item = OneLineListItem(text=name)
+
+        self.list_item = OneLineListItem()
+        self.update_name()
         self.list_item._no_ripple_effect = True
         self.list_item.bind(on_press=lambda *args: self._set_pressed(True), on_release=self._on_released)
         self.bind(on_touch_move=lambda *args: self._set_pressed(False))
@@ -74,6 +76,15 @@ class ChatListWidgetItem(MDCardSwipe):
         self.on_deleted = None
         self.on_clicked = None
         self._pressed = False
+
+    def update_name(self):
+        name = self.chat.name
+        if not name:
+            if self.chat.last_message is None:
+                name = "<Новый диалог>"
+            else:
+                name = self.chat.last_message.content
+        self.list_item.text = name
 
     def _set_pressed(self, flag):
         self._pressed = flag

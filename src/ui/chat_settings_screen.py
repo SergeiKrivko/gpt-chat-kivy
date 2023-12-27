@@ -21,13 +21,16 @@ class ChatSettingsScreen(MDScreen):
         self.top_bar.left_action_items = [['arrow-left', lambda x: self.on_closed()]]
         main_layout.add_widget(self.top_bar)
 
-        layout = MDBoxLayout(orientation='vertical')
-        layout.padding = 25
+        layout = MDBoxLayout(orientation='vertical', adaptive_height=True)
+        layout.padding = (40, 20, 40, 40)
+        layout.spacing = 15
         main_layout.add_widget(layout)
 
-        layout.add_widget(MDLabel(text="Chat name:", size_hint_y=None))
-        self.chat_name_edit = MDTextField(mode='round', size_hint_y=None)
+        layout.add_widget(MDLabel(text="Chat name:", adaptive_height=True))
+        self.chat_name_edit = MDTextField(mode='round')
         layout.add_widget(self.chat_name_edit)
+
+        main_layout.add_widget(MDBoxLayout())
 
         self._chat: GPTChat | None = None
 

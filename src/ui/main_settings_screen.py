@@ -19,8 +19,8 @@ class MainSettingsScreen(MDScreen):
         self.top_bar.left_action_items = [['arrow-left', lambda x: self.on_closed()]]
         main_layout.add_widget(self.top_bar)
 
-        layout = MDBoxLayout(orientation='vertical')
-        layout.padding = 25
+        layout = MDBoxLayout(orientation='vertical', adaptive_height=True)
+        layout.padding = (40, 20, 40, 40)
         main_layout.add_widget(layout)
 
         self.dark_theme_item = SwitchItem("Dark theme")
@@ -31,6 +31,8 @@ class MainSettingsScreen(MDScreen):
 
         self.color_box = SwitchItem("Color")
         layout.add_widget(self.color_box)
+
+        main_layout.add_widget(MDBoxLayout())
 
     def set_dark_theme(self, dark):
         # self.app.theme_cls.theme_style = 'Dark' if dark else 'Light'

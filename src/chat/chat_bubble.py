@@ -14,7 +14,7 @@ class ChatBubble(MDLabel, StencilBehavior):
         self.app = app
         self.allow_selection = True
         self.adaptive_height = True
-        self.padding = 15
+        self.padding = 25
         self.size_hint_x = 0.8
         self.text = text
         if side == 'right':
