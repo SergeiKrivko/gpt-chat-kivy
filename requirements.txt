@@ -1,0 +1,5 @@
+requests~=2.31.0
+aiohttp~=3.9.1
+Pillow~=10.1.0
+Kivy~=2.2.1
+kivymd~=1.1.1
