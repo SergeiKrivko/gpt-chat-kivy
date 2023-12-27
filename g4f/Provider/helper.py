@@ -10,17 +10,17 @@ import os
 from os              import path
 from asyncio         import AbstractEventLoop
 # from platformdirs    import user_config_dir
-from browser_cookie3 import (
-    chrome,
-    chromium,
-    opera,
-    opera_gx,
-    brave,
-    edge,
-    vivaldi,
-    firefox,
-    _LinuxPasswordManager
-)
+# from browser_cookie3 import (
+#     chrome,
+#     chromium,
+#     opera,
+#     opera_gx,
+#     brave,
+#     edge,
+#     vivaldi,
+#     firefox,
+#     _LinuxPasswordManager
+# )
 
 from ..typing import Dict, Messages
 from .. import debug
