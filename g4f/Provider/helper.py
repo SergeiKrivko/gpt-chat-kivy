@@ -9,7 +9,7 @@ import secrets
 import os
 from os              import path
 from asyncio         import AbstractEventLoop
-from platformdirs    import user_config_dir
+# from platformdirs    import user_config_dir
 from browser_cookie3 import (
     chrome,
     chromium,
@@ -24,6 +24,9 @@ from browser_cookie3 import (
 
 from ..typing import Dict, Messages
 from .. import debug
+
+
+user_data_dir = './g4f'
 
 # Change event loop policy on windows
 if sys.platform == 'win32':
@@ -92,7 +95,6 @@ def get_cookies(domain_name=''):
     if domain_name in _cookies:
         return _cookies[domain_name]
     def g4f(domain_name):
-        user_data_dir = user_config_dir("g4f")
         cookie_file = path.join(user_data_dir, "Default", "Cookies")
         return [] if not path.exists(cookie_file) else chrome(cookie_file, domain_name)
 

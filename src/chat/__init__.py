@@ -23,6 +23,9 @@ class ChatPanel(BoxLayout):
         else:
             app_data_dir = app.user_data_dir
 
+        import g4f.Provider.helper
+        g4f.Provider.helper.user_data_dir = os.path.join(app_data_dir, 'g4f')
+
         self.db = Database(app_data_dir)
 
         self._screen_manager = MDScreenManager()

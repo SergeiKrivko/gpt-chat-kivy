@@ -4,15 +4,13 @@ from kivy.uix.boxlayout import BoxLayout
 from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton
-from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.scrollview import MDScrollView
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.toolbar import MDTopAppBar
-from kivymd.uix.snackbar import Snackbar
 
 from src.chat.chat_bubble import ChatBubble
-# from src.gpt import stream_response
+from src.gpt import stream_response
 from src.gpt.chat import GPTChat
 from src.gpt.message import GPTMessage
 
