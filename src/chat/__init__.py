@@ -6,7 +6,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivymd.app import MDApp
 from kivymd.uix.screenmanager import MDScreenManager
 
-from src.chat.chat_list import ChatsList, ChatListWidgetItem
+from src.chat.chat_list import ChatsList
 from src.chat.chat_widget import ChatWidget
 from src.gpt.chat import GPTChat
 # from src.gpt.database import Database
@@ -30,9 +30,9 @@ class ChatPanel(BoxLayout):
 
         self.chat_list = ChatsList(self.app)
         self.chat_list.top_panel.on_settings_clicked = self.open_settings
-        self.chat_list.on_chat_deleted = self.delete_chat
+        # self.chat_list.on_chat_deleted = self.delete_chat
         self._screen_manager.add_widget(self.chat_list)
-        self.chat_list.top_panel.on_chat_added = self.new_chat
+        # self.chat_list.top_panel.on_chat_added = self.new_chat
 
         self.settings_screen = MainSettingsScreen(self.app)
         self.settings_screen.on_closed = self.close_settings
@@ -43,25 +43,6 @@ class ChatPanel(BoxLayout):
 
         # for chat in self.db.chats:
         #     self.add_chat(chat)
-
-    def add_chat(self, chat: GPTChat):
-        widget = ChatWidget(self.app, chat)
-        widget.top_panel.on_chat_closed = self.hide_chat
-        self._screen_manager.add_widget(widget)
-        item = self.chat_list.add_item(chat)
-        item.on_clicked = self._on_list_widget_item_clicked
-        self.chat_widgets[chat.id] = widget
-
-    def delete_chat(self, chat):
-        self._screen_manager.remove_widget(self.chat_widgets[chat.id])
-        self.chat_widgets.pop(chat.id)
-
-    def _on_list_widget_item_clicked(self, item: ChatListWidgetItem):
-        self.show_chat(item.chat)
-
-    def new_chat(self):
-        chat = self.db.add_chat()
-        self.add_chat(chat)
 
     def show_chat(self, chat: GPTChat):
         self._screen_manager.transition.direction = 'left'
