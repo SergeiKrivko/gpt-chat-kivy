@@ -11,7 +11,7 @@ import base64
 import uuid
 import urllib.parse
 import time
-from PIL import Image
+# from PIL import Image
 from aiohttp        import ClientSession, ClientTimeout
 from ..typing       import AsyncResult, Messages
 from .base_provider import AsyncGeneratorProvider
@@ -354,7 +354,7 @@ def get_orientation(data: bytes) -> int:
     except Exception:
         pass
 
-def process_image(orientation: int, img: Image.Image, new_width: int, new_height: int) -> Image.Image:
+def process_image(orientation: int, img, new_width: int, new_height: int):
     try:
         # Initialize the canvas
         new_img = Image.new("RGB", (new_width, new_height), color="#FFFFFF")

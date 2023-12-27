@@ -111,8 +111,9 @@ class ChatWidget(MDScreen):
 
     def _send_message(self, bubble, messages):
         try:
-            for el in simple_response(messages):
-                bubble.add_text(el)
+            # for el in simple_response(messages):
+            #     bubble.add_text(el)
+            bubble.add_text(simple_response(messages))
         except Exception:
             pass
 
