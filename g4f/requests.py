@@ -35,7 +35,8 @@ class StreamResponse:
         async for chunk in self.inner.aiter_content():
             yield chunk
 
-class StreamSession(AsyncSession):
+# class StreamSession(AsyncSession):
+class StreamSession():
     @asynccontextmanager
     async def request(
         self, method: str, url: str, **kwargs
