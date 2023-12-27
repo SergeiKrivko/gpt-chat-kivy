@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-import json, base64, requests, execjs, random, uuid
+import json, base64, requests, random, uuid
+# import execjs
 
 from ..typing       import Messages, TypedDict, CreateResult, Any
 from .base_provider import BaseProvider

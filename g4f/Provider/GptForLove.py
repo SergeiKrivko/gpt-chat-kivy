@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from aiohttp import ClientSession
-import execjs, os, json
+# import execjs
+import os, json
 
 from ..typing import AsyncResult, Messages
 from .base_provider import AsyncGeneratorProvider
