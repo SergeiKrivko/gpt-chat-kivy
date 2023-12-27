@@ -13,8 +13,8 @@ else:
 class MainApp(MDApp):
     def build(self):
         main_layout = BoxLayout(orientation="vertical")
-        self.theme_cls.theme_style = "Dark"
-        self.theme_cls.primary_palette = "Green"
+        # self.theme_cls.theme_style = "Dark"
+        # self.theme_cls.primary_palette = "Green"
 
         global error
 
