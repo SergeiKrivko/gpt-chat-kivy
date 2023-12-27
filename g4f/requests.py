@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 from functools import partialmethod
 from typing import AsyncGenerator
 from urllib.parse import urlparse
-from curl_cffi.requests import AsyncSession, Session, Response
+# from curl_cffi.requests import AsyncSession, Session, Response
 # from .webdriver import WebDriver, WebDriverSession, bypass_cloudflare
 
 class StreamResponse:

@@ -10,7 +10,7 @@ from kivymd.uix.textfield import MDTextField
 from kivymd.uix.toolbar import MDTopAppBar
 
 from src.chat.chat_bubble import ChatBubble
-from src.gpt import stream_response
+from src.gpt import simple_response
 from src.gpt.chat import GPTChat
 from src.gpt.message import GPTMessage
 
@@ -111,7 +111,7 @@ class ChatWidget(MDScreen):
 
     def _send_message(self, bubble, messages):
         try:
-            for el in stream_response(messages):
+            for el in simple_response(messages):
                 bubble.add_text(el)
         except Exception:
             pass
