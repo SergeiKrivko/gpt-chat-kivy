@@ -6,7 +6,7 @@ try:
     from kivymd.app import MDApp
 
     from kivy.core.window import Window
-    Window.softinput_mode = 'pan'
+    Window.softinput_mode = 'resize'
 
     from src import config
     from src.chat import ChatPanel
