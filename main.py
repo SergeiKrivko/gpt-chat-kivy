@@ -1,5 +1,7 @@
 from kivymd.uix.label import MDLabel
 
+from src.settings_manager import SettingsManager
+
 try:
     from kivy.uix.boxlayout import BoxLayout
     from kivymd.app import MDApp
@@ -18,9 +20,6 @@ else:
 class MainApp(MDApp):
     def build(self):
         main_layout = BoxLayout(orientation="vertical")
-        self.theme_cls.theme_style = "Dark"
-        self.theme_cls.primary_palette = "Green"
-
         self.title = config.APP_NAME
 
         global error

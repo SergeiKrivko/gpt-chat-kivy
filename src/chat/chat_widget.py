@@ -1,8 +1,7 @@
 import asyncio
 import threading
 
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.textinput import TextInput
+from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton
@@ -23,7 +22,7 @@ class ChatWidget(MDScreen):
         self.chat = chat
         self.app = app
 
-        main_layout = BoxLayout(orientation='vertical')
+        main_layout = MDBoxLayout(orientation='vertical')
         self.add_widget(main_layout)
 
         self.top_panel = ChatTopPanel(self.chat)

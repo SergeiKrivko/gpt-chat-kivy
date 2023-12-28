@@ -1,4 +1,4 @@
-from kivy.uix.boxlayout import BoxLayout
+from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.app import MDApp
 from kivymd.uix.card import MDCardSwipe, MDCardSwipeLayerBox, MDCardSwipeFrontBox
 from kivymd.uix.list import MDList, OneLineListItem
@@ -14,7 +14,7 @@ class ChatsList(MDScreen):
         super().__init__(name='Chats')
         self.app = app
 
-        main_layout = BoxLayout(orientation='vertical')
+        main_layout = MDBoxLayout(orientation='vertical')
         self.add_widget(main_layout)
 
         self.top_panel = ListTopPanel()
