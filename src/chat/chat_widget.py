@@ -2,6 +2,7 @@ import asyncio
 import threading
 
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.textinput import TextInput
 from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton
@@ -47,6 +48,7 @@ class ChatWidget(MDScreen):
         bottom_layout = MDBoxLayout(size_hint_y=None, adaptive_height=True)
         bottom_layout.padding = (25, 25, 25, 50)
         bottom_layout.spacing = 15
+        bottom_layout.md_bg_color = app.theme_cls.primary_color
         main_layout.add_widget(bottom_layout)
 
         self.input_area = MDTextField(
@@ -54,8 +56,14 @@ class ChatWidget(MDScreen):
             hint_text='Сообщение',
             mode="rectangle",
             size_hint_y=None,
-            padding=4,
+            # padding=4,
         )
+        self.input_area.text_color_normal = self.app.theme_cls.bg_normal
+        self.input_area.text_color_focus = self.app.theme_cls.bg_normal
+        self.input_area.hint_text_color_normal = self.app.theme_cls.bg_normal
+        self.input_area.hint_text_color_focus = self.app.theme_cls.bg_normal
+        self.input_area.line_color_normal = self.app.theme_cls.primary_color
+        self.input_area.line_color_focus = self.app.theme_cls.bg_normal
         bottom_layout.add_widget(self.input_area)
 
         self.button_send = MDIconButton(icon='send')
