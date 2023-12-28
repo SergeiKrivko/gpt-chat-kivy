@@ -1,3 +1,4 @@
+import asyncio
 import threading
 
 from kivy.uix.boxlayout import BoxLayout
@@ -117,6 +118,28 @@ class ChatWidget(MDScreen):
             bubble.add_text(simple_response(messages))
         except Exception as ex:
             bubble.add_text(f"{ex.__class__.__name__}: {ex}")
+
+    # def send_message(self, *args):
+    #     if self.input_area.text.strip():
+    #         self.new_message('user', self.input_area.text)
+    #         self.input_area.text = ''
+    #
+    #         messages = self.chat.messages_to_prompt([])
+    #         bubble = self.new_message('assistant', '')
+    #         asyncio.run(self._send_message(bubble, messages))
+    #         print('running')
+    #
+    # async def _send_message(self, bubble, messages):
+    #     try:
+    #         await asyncio.sleep(6)
+    #         # task = asyncio.create_task(simple_response(messages))
+    #         # await task
+    #         # text = task.result()
+    #         text = 'Answer'
+    #         bubble.add_text(text)
+    #         bubble.message.save_content()
+    #     except Exception as ex:
+    #         bubble.add_text(f"{ex.__class__.__name__}: {ex}")
 
 
 class CustomScrollView(MDScrollView):

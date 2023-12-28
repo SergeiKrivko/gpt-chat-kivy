@@ -1,3 +1,4 @@
+from kivy.core.window import Window
 from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.card import MDSeparator
@@ -30,6 +31,11 @@ class ChatSettingsScreen(MDScreen):
         self.chat_name_edit = MDTextField(mode='round')
         layout.add_widget(self.chat_name_edit)
 
+        layout.add_widget(MDSeparator())
+
+        self.label = MDLabel(text="Fullscreen", adaptive_height=True)
+        layout.add_widget(self.label)
+
         main_layout.add_widget(MDBoxLayout())
 
         self._chat: GPTChat | None = None
@@ -38,6 +44,7 @@ class ChatSettingsScreen(MDScreen):
         self._chat = chat
 
         self.chat_name_edit.text = chat.name if chat.name else ''
+        self.label.text = f"Fullscreen {Window.fullscreen}"
 
     def save_chat(self):
         if self._chat is None:

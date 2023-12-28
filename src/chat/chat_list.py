@@ -4,7 +4,7 @@ from kivymd.uix.card import MDCardSwipe, MDCardSwipeLayerBox, MDCardSwipeFrontBo
 from kivymd.uix.list import MDList, OneLineListItem
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.scrollview import MDScrollView
-from kivymd.uix.toolbar import MDTopAppBar
+from kivymd.uix.toolbar import MDTopAppBar, MDBottomAppBar
 
 from src.gpt.chat import GPTChat
 
@@ -25,6 +25,8 @@ class ChatsList(MDScreen):
         main_layout.add_widget(self.scroll_view)
         self.list = MDList()
         self.scroll_view.add_widget(self.list)
+
+        # main_layout.add_widget(MDTopAppBar())
 
         self.on_chat_deleted = None
         self._items = dict()

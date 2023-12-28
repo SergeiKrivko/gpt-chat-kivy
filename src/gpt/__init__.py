@@ -1,3 +1,5 @@
+import asyncio
+
 import g4f
 
 
@@ -25,6 +27,19 @@ def simple_response(messages: list[dict[str: str]], model=None, **kwargs):
         **kwargs
     )
     return response
+
+
+async def async_response(messages: list[dict[str: str]], model=None, **kwargs):
+    if model is None or model == 'default':
+        model = g4f.models.default
+    task = asyncio.create_task(g4f.ChatCompletion.create_async(
+        model=model,
+        messages=messages,
+        timeout=120,
+        **kwargs
+    ))
+    await task
+    return task.result()
 
 
 def try_response(messages: list[dict[str: str]], model=None, count=5, handler=None, **kwargs):
