@@ -4,7 +4,7 @@ from kivymd.uix.card import MDSeparator
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.toolbar import MDTopAppBar
 
-from src.ui.select_area import SelectArea, SelectionItem
+from src.ui.select_area import SelectionItem
 from src.ui.switch_item import SwitchItem
 
 

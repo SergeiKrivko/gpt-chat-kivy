@@ -7,6 +7,7 @@ try:
     from kivymd.app import MDApp
 
     from kivy.core.window import Window
+    Window.fullscreen = False
     Window.softinput_mode = 'resize'
 
     from src import config

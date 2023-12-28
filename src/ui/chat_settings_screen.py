@@ -4,10 +4,13 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.card import MDSeparator
 from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
+from kivymd.uix.slider import MDSlider
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.toolbar import MDTopAppBar
 
+import g4f
 from src.gpt.chat import GPTChat
+from src.ui.select_area import SelectionItem
 
 
 class ChatSettingsScreen(MDScreen):
@@ -33,8 +36,26 @@ class ChatSettingsScreen(MDScreen):
 
         layout.add_widget(MDSeparator())
 
-        self.label = MDLabel(text="Fullscreen", adaptive_height=True)
-        layout.add_widget(self.label)
+        self.model_edit = SelectionItem("Model", ['default'] + g4f.models.Model.__all__())
+        layout.add_widget(self.model_edit)
+
+        layout.add_widget(MDSeparator())
+
+        layout.add_widget(MDLabel(text="Used messages:", adaptive_height=True))
+        self.used_messages_edit = MDSlider(min=1, max=10, hint=True)
+        layout.add_widget(self.used_messages_edit)
+
+        layout.add_widget(MDSeparator())
+
+        layout.add_widget(MDLabel(text="Saved messages:", adaptive_height=True))
+        self.saved_messages_edit = MDSlider(min=50, max=1000, hint=True)
+        layout.add_widget(self.saved_messages_edit)
+
+        layout.add_widget(MDSeparator())
+
+        layout.add_widget(MDLabel(text="Temperature:", adaptive_height=True))
+        self.temperature_edit = MDSlider(min=0, max=100, hint=True)
+        layout.add_widget(self.temperature_edit)
 
         main_layout.add_widget(MDBoxLayout())
 
@@ -44,9 +65,17 @@ class ChatSettingsScreen(MDScreen):
         self._chat = chat
 
         self.chat_name_edit.text = chat.name if chat.name else ''
-        self.label.text = f"Fullscreen {Window.fullscreen}"
+        self.model_edit.current = 'default' if not chat.model else chat.model
+        self.used_messages_edit.value = chat.used_messages
+        self.saved_messages_edit.value = chat.saved_messages
+        self.temperature_edit.value = int(chat.temperature * 100)
 
     def save_chat(self):
         if self._chat is None:
             return
         self._chat.name = self.chat_name_edit.text
+        self._chat.model = self.model_edit.current
+        self._chat.used_messages = self.used_messages_edit.value
+        self._chat.saved_messages = self.saved_messages_edit.value
+        self._chat.temperature = self.temperature_edit.value / 100
+        self._chat._db.commit()
