@@ -90,7 +90,6 @@ class ChatPanel(MDBoxLayout):
         self._screen_manager.current = 'Chats'
         self.chat_list.update_name(self.current_chat)
         self.current_chat = None
-        self.db.save_chats()
 
     def open_settings(self):
         self._screen_manager.transition.direction = 'left'

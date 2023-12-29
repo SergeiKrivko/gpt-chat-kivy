@@ -1,3 +1,5 @@
+import asyncio
+
 from kivymd.uix.label import MDLabel
 
 from src.settings_manager import SettingsManager
@@ -93,8 +95,12 @@ def update_viewport(self=Window):
     self.update_childsize()
 
 
-if __name__ == "__main__":
+async def main():
     app = MainApp()
     Window.update_viewport = update_viewport
-    app.run()
+    await app.async_run(async_lib='asyncio')
     app.main_widget.db.close()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

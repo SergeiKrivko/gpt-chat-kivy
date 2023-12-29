@@ -1,4 +1,5 @@
 from kivymd.app import MDApp
+from kivymd.material_resources import dp
 from kivymd.uix.behaviors import StencilBehavior
 from kivymd.uix.label import MDLabel
 
@@ -14,7 +15,7 @@ class ChatBubble(MDLabel, StencilBehavior):
         self.app = app
         self.allow_selection = True
         self.adaptive_height = True
-        self.padding = 25
+        self.padding = dp(10)
         self.size_hint_x = 0.8
         self.text = text
         if side == 'right':
@@ -23,7 +24,7 @@ class ChatBubble(MDLabel, StencilBehavior):
         else:
             self.md_bg_color = self.app.theme_cls.bg_light if self.app.theme_cls.theme_style == 'Dark' else \
                 self.app.theme_cls.bg_darkest
-        self.radius = (25, 25, 0 if side == 'right' else 25, 0 if side == 'left' else 25)
+        self.radius = (dp(10), dp(10), 0 if side == 'right' else dp(10), 0 if side == 'left' else dp(10))
         self.pos_hint = {'center_x': 0.4 if side == 'left' else 0.6}
 
     def add_text(self, text):

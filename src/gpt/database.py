@@ -37,7 +37,6 @@ class Database:
             self._create_chat_table(chat_id)
 
         self._connection.commit()
-        self._messages_to_save = set()
 
     def _create_chat_table(self, chat_id):
         self.cursor.execute(f'''
@@ -75,18 +74,7 @@ class Database:
     def commit(self):
         self._connection.commit()
 
-    def add_message_to_save(self, message):
-        self._messages_to_save.add(message)
-
-    def delete_message_to_save(self, message):
-        self._messages_to_save.remove(message)
-
-    def save_chats(self):
-        for el in self._messages_to_save.copy():
-            el.save_content()
-
     def close(self):
-        self.save_chats()
         self._connection.commit()
         self._connection.close()
 

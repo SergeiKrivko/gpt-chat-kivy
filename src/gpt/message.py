@@ -26,26 +26,14 @@ class GPTMessage:
 
     @property
     def content(self):
-        if self._text is not None:
-            return self.save_content()
         self._db.cursor.execute(f"""SELECT content from Messages{self.chat_id} WHERE id = {self._id}""")
         content = self._db.cursor.fetchone()[0]
         return content
 
-    def save_content(self):
-        text = self._text
-        self._text = None
+    def add_text(self, text):
+        text = self.content + text
         self._db.cursor.execute(f"""UPDATE Messages{self.chat_id} SET content = ? WHERE id = {self._id}""", (text,))
         self._db.commit()
-        self._db.delete_message_to_save(self)
-        return text
-
-    def add_text(self, text):
-        if self._text is None:
-            self._text = text
-            self._db.add_message_to_save(self)
-        else:
-            self._text = self._text + text
 
     @property
     def ctime(self):

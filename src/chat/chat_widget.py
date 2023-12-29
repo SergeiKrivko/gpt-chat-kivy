@@ -1,17 +1,17 @@
 import asyncio
-import threading
 
-from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.app import MDApp
+from kivymd.material_resources import dp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.scrollview import MDScrollView
+from kivymd.uix.snackbar import Snackbar
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.toolbar import MDTopAppBar
 
 from src.chat.chat_bubble import ChatBubble
-from src.gpt import simple_response
+from src.gpt import async_response
 from src.gpt.chat import GPTChat
 from src.gpt.message import GPTMessage
 
@@ -33,8 +33,8 @@ class ChatWidget(MDScreen):
 
         self.scroll_layout = MDBoxLayout(orientation='vertical')
         self.scroll_layout.size_hint_y = None
-        self.scroll_layout.padding = 25
-        self.scroll_layout.spacing = 20
+        self.scroll_layout.padding = dp(10)
+        self.scroll_layout.spacing = dp(8)
         self.scroll_layout.bind(minimum_height=self._on_resize)
         self.scroll_view.add_widget(self.scroll_layout)
         self.scroll_view.on_scroll = self.on_scroll
@@ -114,39 +114,19 @@ class ChatWidget(MDScreen):
             self.input_area.text = ''
 
             messages = self.chat.messages_to_prompt([])
-            bubble = self.new_message('assistant', '')
-            thread = threading.Thread(target=lambda: self._send_message(bubble, messages))
-            thread.start()
+            loop = asyncio.get_event_loop()
+            loop.create_task(self._send_message(messages)).done()
 
-    def _send_message(self, bubble, messages):
+    async def _send_message(self, messages):
         try:
-            # for el in simple_response(messages):
-            #     bubble.add_text(el)
-            bubble.add_text(simple_response(messages))
+            task = asyncio.create_task(async_response(messages))
+            await task
+            text = task.result()
+            self.new_message('assistant', text)
         except Exception as ex:
-            bubble.add_text(f"{ex.__class__.__name__}: {ex}")
-
-    # def send_message(self, *args):
-    #     if self.input_area.text.strip():
-    #         self.new_message('user', self.input_area.text)
-    #         self.input_area.text = ''
-    #
-    #         messages = self.chat.messages_to_prompt([])
-    #         bubble = self.new_message('assistant', '')
-    #         asyncio.run(self._send_message(bubble, messages))
-    #         print('running')
-    #
-    # async def _send_message(self, bubble, messages):
-    #     try:
-    #         await asyncio.sleep(6)
-    #         # task = asyncio.create_task(simple_response(messages))
-    #         # await task
-    #         # text = task.result()
-    #         text = 'Answer'
-    #         bubble.add_text(text)
-    #         bubble.message.save_content()
-    #     except Exception as ex:
-    #         bubble.add_text(f"{ex.__class__.__name__}: {ex}")
+            Snackbar(
+                text=f"{ex.__class__.__name__}: {ex}",
+            ).open()
 
 
 class CustomScrollView(MDScrollView):
