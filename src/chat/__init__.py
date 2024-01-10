@@ -24,6 +24,8 @@ class ChatPanel(MDBoxLayout):
             app_data_dir = os.path.dirname(sys.argv[0])
         else:
             app_data_dir = app.user_data_dir
+        self.app_data_dir = app_data_dir
+        os.makedirs(f"{self.app_data_dir}/temp", exist_ok=True)
 
         import g4f.Provider.helper
         g4f.Provider.helper.user_data_dir = os.path.join(app_data_dir, 'g4f')
@@ -58,7 +60,7 @@ class ChatPanel(MDBoxLayout):
             self.add_chat(chat)
 
     def add_chat(self, chat: GPTChat):
-        widget = ChatWidget(self.app, chat)
+        widget = ChatWidget(self.app, f"{self.app_data_dir}/temp", chat)
         widget.top_panel.on_chat_closed = self.hide_chat
         widget.top_panel.on_settings_clicked = self.open_chat_settings
         self._screen_manager.add_widget(widget)

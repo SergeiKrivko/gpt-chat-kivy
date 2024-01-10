@@ -17,10 +17,11 @@ from src.gpt.message import GPTMessage
 
 
 class ChatWidget(MDScreen):
-    def __init__(self, app: MDApp, chat: GPTChat):
+    def __init__(self, app: MDApp, temp_dir, chat: GPTChat):
         super().__init__(name=f'Chat{chat.id}')
         self.chat = chat
         self.app = app
+        self.temp_dir = temp_dir
 
         main_layout = MDBoxLayout(orientation='vertical')
         self.add_widget(main_layout)
@@ -85,7 +86,7 @@ class ChatWidget(MDScreen):
             self.insert_bubble(message)
 
     def add_bubble(self, message: GPTMessage):
-        bubble = ChatBubble(self.app, message)
+        bubble = ChatBubble(self.app, self.temp_dir, message)
         self._bubbles[message.id] = bubble
         self._bubbles_list.append(bubble)
         self.scroll_layout.add_widget(bubble)
@@ -93,7 +94,7 @@ class ChatWidget(MDScreen):
         return bubble
 
     def insert_bubble(self, message: GPTMessage):
-        bubble = ChatBubble(self.app, message)
+        bubble = ChatBubble(self.app, self.temp_dir, message)
         self._bubbles[message.id] = bubble
         self._bubbles_list.insert(0, bubble)
         self.scroll_layout.clear_widgets()
