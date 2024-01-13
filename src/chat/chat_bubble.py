@@ -201,19 +201,19 @@ class ChatBubble(MDBoxLayout, StencilBehavior, TouchBehavior):
     #     except Exception:
     #         self.document.add_paragraph(default_text)
     #     return True
-    #
-    # def parse_code(self, line):
-    #     if not line.startswith('```'):
-    #         return False
-    #     lexer = line.lstrip('```').strip()
-    #     code_lines = []
-    #     while (line := self._next_line()) is not None and not line.endswith('```'):
-    #         code_lines.append(line)
-    #
-    #     label = _CodeBox(self.app, self.side, '\n'.join(code_lines))
-    #     self.add_widget(label)
-    #
-    #     return True
+
+    def parse_code(self, line):
+        if not line.startswith('```'):
+            return False
+        lexer = line.lstrip('```').strip()
+        code_lines = []
+        while (line := self._next_line()) is not None and not line.endswith('```'):
+            code_lines.append(line)
+
+        label = _CodeBox(self.app, self.side, '\n'.join(code_lines))
+        self.add_widget(label)
+
+        return True
 
 
 def _count_in_start(line, symbol):
