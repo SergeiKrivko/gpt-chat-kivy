@@ -176,44 +176,44 @@ class ChatBubble(MDBoxLayout, StencilBehavior, TouchBehavior):
             return True
         return False
 
-    def parse_image(self, line):
-        if not re.match(r"!\[[\w.=\\/:]*]\([\w.\\/:]+\)", line.strip()):
-            return False
-        default_text, image_path = line.strip()[2:line.index(')')].split('](')
-        if image_path.endswith('.svg'):
-            svg2png(url=image_path, write_to=(image_path := f"{self.bm.sm.temp_dir()}/image.png"))
-        img = Image.open(image_path)
-        height, width = img.height, img.width
-        if default_text.startswith('height='):
-            h = int(default_text.lstrip('height='))
-            width = width * h // height
-            height = h
-        elif default_text.startswith('width='):
-            w = int(default_text.lstrip('width='))
-            height = height * w // width
-            width = w
-        elif width > 170:
-            height = height * 170 // width
-            width = 170
-        img.close()
-        try:
-            self.document.add_picture(image_path, width=Mm(width), height=Mm(height))
-        except Exception:
-            self.document.add_paragraph(default_text)
-        return True
-
-    def parse_code(self, line):
-        if not line.startswith('```'):
-            return False
-        lexer = line.lstrip('```').strip()
-        code_lines = []
-        while (line := self._next_line()) is not None and not line.endswith('```'):
-            code_lines.append(line)
-
-        label = _CodeBox(self.app, self.side, '\n'.join(code_lines))
-        self.add_widget(label)
-
-        return True
+    # def parse_image(self, line):
+    #     if not re.match(r"!\[[\w.=\\/:]*]\([\w.\\/:]+\)", line.strip()):
+    #         return False
+    #     default_text, image_path = line.strip()[2:line.index(')')].split('](')
+    #     if image_path.endswith('.svg'):
+    #         svg2png(url=image_path, write_to=(image_path := f"{self.bm.sm.temp_dir()}/image.png"))
+    #     img = Image.open(image_path)
+    #     height, width = img.height, img.width
+    #     if default_text.startswith('height='):
+    #         h = int(default_text.lstrip('height='))
+    #         width = width * h // height
+    #         height = h
+    #     elif default_text.startswith('width='):
+    #         w = int(default_text.lstrip('width='))
+    #         height = height * w // width
+    #         width = w
+    #     elif width > 170:
+    #         height = height * 170 // width
+    #         width = 170
+    #     img.close()
+    #     try:
+    #         self.document.add_picture(image_path, width=Mm(width), height=Mm(height))
+    #     except Exception:
+    #         self.document.add_paragraph(default_text)
+    #     return True
+    #
+    # def parse_code(self, line):
+    #     if not line.startswith('```'):
+    #         return False
+    #     lexer = line.lstrip('```').strip()
+    #     code_lines = []
+    #     while (line := self._next_line()) is not None and not line.endswith('```'):
+    #         code_lines.append(line)
+    #
+    #     label = _CodeBox(self.app, self.side, '\n'.join(code_lines))
+    #     self.add_widget(label)
+    #
+    #     return True
 
 
 def _count_in_start(line, symbol):

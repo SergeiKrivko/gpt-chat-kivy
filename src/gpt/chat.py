@@ -226,12 +226,11 @@ class GPTChat:
         self._db.commit()
 
     def system_prompts(self):
-        match self.type:
-            case GPTChat.SIMPLE:
-                return []
-            case GPTChat.TRANSLATE:
-                return [{'role': 'system', 'content': f"You translate messages from {self.type_data['language1']} to "
-                                                      f"{self.type_data['language2']} or vice versa. ONLY TRANSLATE!"}]
-            case GPTChat.SUMMARY:
-                return [{'role': 'system', 'content': "You compose a summary of the messages sent to you using"
-                                                      " russian language"}]
+        if self.type == GPTChat.SIMPLE:
+            return []
+        elif self.type == GPTChat.TRANSLATE:
+            return [{'role': 'system', 'content': f"You translate messages from {self.type_data['language1']} to "
+                                                  f"{self.type_data['language2']} or vice versa. ONLY TRANSLATE!"}]
+        elif self.type == GPTChat.SUMMARY:
+            return [{'role': 'system', 'content': "You compose a summary of the messages sent to you using"
+                                                  " russian language"}]
