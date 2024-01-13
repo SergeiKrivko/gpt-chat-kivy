@@ -121,7 +121,7 @@ jobs:
       - name: Build with buildozer
         run: |
           cd /Users/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
-          /Users/runner/Library/Python/3.11/bin/buildozer ios debug
+          python3.11 -m buildozer ios debug
 
       - name: LS
         run: |
