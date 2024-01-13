@@ -68,10 +68,16 @@ jobs:
         with:
           path: master
 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+
       - name: Install dependencies
         run: |
-          brew install pkg-config sdl2 sdl2_image sdl2_ttf sdl2_mixer gstreamer autoconf automake
-          python3 -m pip install --user --upgrade pip virtualenv kivy-ios buildozer
+          brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer gstreamer automake
+          export PATH=$PATH:/Users/runner/Library/Python/3.11/bin
+          python3.11 -m pip install --user --upgrade pip virtualenv kivy-ios buildozer
 
       - name: Build with buildozer
         run: buildozer ios debug
