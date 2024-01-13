@@ -107,14 +107,14 @@ jobs:
       - name: Install dependencies
         run: |
           brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer gstreamer automake
-          python3.8 -m pip install --user --upgrade pip virtualenv
-          python3.8 -m pip install --user --upgrade kivy-ios buildozer
-          python3.8 -m pip install --upgrade Cython==0.29.36
+          python3.11 -m pip install --user --upgrade pip virtualenv
+          python3.11 -m pip install --user --upgrade kivy-ios buildozer
+          python3.11 -m pip install --upgrade Cython==0.29.36
 
       - name: Build with buildozer
         run: |
           cd /Users/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
-          python3.8 -m buildozer ios debug
+          python3.11 -m buildozer ios debug
 
       - name: LS
         run: |
