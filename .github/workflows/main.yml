@@ -104,19 +104,19 @@ jobs:
         with:
           path: master
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.11
+#      - name: Set up Python
+#        uses: actions/setup-python@v2
+#        with:
+#          python-version: 3.11
 
       - name: Install dependencies
         run: |
           brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer gstreamer automake
-          export PATH=$PATH:/Users/runner/Library/Python/3.11/bin
+#          export PATH=$PATH:/Users/runner/Library/Python/3.11/bin
           python3.11 -m pip install --user --upgrade pip virtualenv
           python3.11 -m pip install --user --upgrade kivy-ios buildozer
           python3.11 -m pip install --user --upgrade Cython==0.29.36
-          ls /Users/runner/Library/Python/3.11/bin
+#          ls /Users/runner/Library/Python/3.11/bin
 
       - name: Build with buildozer
         run: |

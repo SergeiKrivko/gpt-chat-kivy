@@ -1,12 +1,10 @@
 import asyncio
 
-from kivymd.uix.label import MDLabel
-
-from src.settings_manager import SettingsManager
-
 try:
     from kivy.uix.boxlayout import BoxLayout
     from kivymd.app import MDApp
+    import kivy
+    from kivymd.uix.label import MDLabel
 
     from kivy.core.window import Window
     Window.fullscreen = False
@@ -32,10 +30,9 @@ class MainApp(MDApp):
                 self.main_widget = ChatPanel(self)
             except Exception as ex:
                 error = f"{ex.__class__.__name__}: {ex}"
-                raise ex
 
         if error:
-            main_layout.add_widget(MDLabel(text=error))
+            main_layout.add_widget(MDLabel(text=error + f"\n\nKivy version: {kivy._version.__version__}"))
         else:
             main_layout.add_widget(self.main_widget)
 
