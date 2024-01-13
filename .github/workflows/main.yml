@@ -109,7 +109,8 @@ jobs:
           brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer gstreamer automake
           python3.11 -m pip install --user --upgrade pip virtualenv
           python3.11 -m pip install --user --upgrade kivy-ios buildozer
-          python3.11 -m pip install --user --upgrade Cython==0.29.36
+          python3.11 -m pip install --upgrade Cython==0.29.36
+          python3 -m pip install --upgrade Cython==0.29.36
 
       - name: Build with buildozer
         run: |
