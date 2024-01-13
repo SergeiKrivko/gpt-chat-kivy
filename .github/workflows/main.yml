@@ -58,9 +58,9 @@ jobs:
 #          path: ${{ steps.buildozer.outputs.filename }}
 
 
-  build-ios:
-    name: Build for iOS
-    runs-on: macos-latest
+  build-android-2:
+    name: Build for Android
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -75,18 +75,53 @@ jobs:
 
       - name: Install dependencies
         run: |
-          brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer gstreamer automake
-          export PATH=$PATH:/Users/runner/Library/Python/3.11/bin
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+          pip3 install --user --upgrade Cython==0.29.33 virtualenv  # the --user should be removed if you do this in a venv
+          export PATH=$PATH:~/.local/bin/
+          
           python3.11 -m pip install --user --upgrade pip virtualenv
           python3.11 -m pip install --user --upgrade kivy-ios buildozer
           python3.11 -m pip install --user --upgrade Cython==0.29.36
 
       - name: Build with buildozer
         run: |
-          cd /Users/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
-          /Users/runner/Library/Python/3.11/bin/buildozer ios debug
+          buildozer android debug
 
       - name: LS
         run: |
           ls
           ls ./bin
+
+
+#  build-ios:
+#    name: Build for iOS
+#    runs-on: macos-latest
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#        with:
+#          path: master
+#
+#      - name: Set up Python
+#        uses: actions/setup-python@v2
+#        with:
+#          python-version: 3.11
+#
+#      - name: Install dependencies
+#        run: |
+#          brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer gstreamer automake
+#          export PATH=$PATH:/Users/runner/Library/Python/3.11/bin
+#          python3.11 -m pip install --user --upgrade pip virtualenv
+#          python3.11 -m pip install --user --upgrade kivy-ios buildozer
+#          python3.11 -m pip install --user --upgrade Cython==0.29.36
+#
+#      - name: Build with buildozer
+#        run: |
+#          cd /Users/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
+#          /Users/runner/Library/Python/3.11/bin/buildozer ios debug
+#
+#      - name: LS
+#        run: |
+#          ls
+#          ls ./bin
