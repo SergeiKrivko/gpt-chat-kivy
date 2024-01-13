@@ -80,7 +80,7 @@ jobs:
           python3.11 -m pip install --user --upgrade pip virtualenv kivy-ios buildozer
 
       - name: Build with buildozer
-        run: buildozer ios debug
+        run: /Users/runner/Library/Python/3.11/bin/buildozer ios debug
 
       - name: LS
         run: |
