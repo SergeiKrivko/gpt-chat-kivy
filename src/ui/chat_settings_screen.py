@@ -1,5 +1,6 @@
 from typing import Union
 
+from kivy.metrics import dp
 from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.card import MDSeparator
@@ -44,21 +45,21 @@ class ChatSettingsScreen(MDScreen):
 
         layout.add_widget(MDLabel(text="Used messages:", adaptive_height=True))
         self.used_messages_edit = MDSlider(min=1, max=10, hint=True)
-        self.used_messages_edit.padding = 20
+        self.used_messages_edit.padding = dp(20)
         layout.add_widget(self.used_messages_edit)
 
         layout.add_widget(MDSeparator())
 
         layout.add_widget(MDLabel(text="Saved messages:", adaptive_height=True))
         self.saved_messages_edit = MDSlider(min=50, max=1000, hint=True)
-        self.saved_messages_edit.padding = 20
+        self.saved_messages_edit.padding = [dp(20), dp(20)]
         layout.add_widget(self.saved_messages_edit)
 
         layout.add_widget(MDSeparator())
 
         layout.add_widget(MDLabel(text="Temperature:", adaptive_height=True))
         self.temperature_edit = MDSlider(min=0, max=100, hint=True)
-        self.temperature_edit.padding = 20
+        self.temperature_edit.padding = [dp(20), dp(20)]
         layout.add_widget(self.temperature_edit)
 
         main_layout.add_widget(MDBoxLayout())

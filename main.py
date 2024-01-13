@@ -32,6 +32,7 @@ class MainApp(MDApp):
                 self.main_widget = ChatPanel(self)
             except Exception as ex:
                 error = f"{ex.__class__.__name__}: {ex}"
+                raise ex
 
         if error:
             main_layout.add_widget(MDLabel(text=error))

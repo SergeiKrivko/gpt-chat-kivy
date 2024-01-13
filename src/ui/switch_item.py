@@ -1,3 +1,4 @@
+from kivy.metrics import dp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.label import MDLabel
 from kivymd.uix.selectioncontrol import MDSwitch
@@ -10,7 +11,7 @@ class SwitchItem(MDBoxLayout):
         self.padding = (0, 0, 10, 0)
 
         self.label = MDLabel(text=text)
-        self.label.padding = 12
+        self.label.padding = [dp(12), dp(12)]
         self.label.adaptive_height = True
         self.add_widget(self.label)
 

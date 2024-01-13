@@ -1,10 +1,9 @@
 from kivymd.app import MDApp
 from kivymd.material_resources import dp
-from kivymd.uix.bottomsheet import MDBottomSheet, MDListBottomSheet
+from kivymd.uix.bottomsheet import MDListBottomSheet
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.button import MDFillRoundFlatButton
 from kivymd.uix.label import MDLabel
-from kivymd.uix.button import MDRectangleFlatButton, MDTextButton, MDFillRoundFlatButton
-from kivymd.uix.list import MDList, OneLineListItem
 
 
 class SelectionItem(MDBoxLayout):
@@ -16,7 +15,7 @@ class SelectionItem(MDBoxLayout):
         self.padding = 10
 
         self.label = MDLabel(text=name)
-        self.label.padding = 12
+        self.label.padding = [dp(12), dp(12)]
         self.label.adaptive_height = True
         self.add_widget(self.label)
 
