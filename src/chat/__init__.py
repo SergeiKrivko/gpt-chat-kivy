@@ -1,6 +1,7 @@
 import os
 import platform
 import sys
+from typing import Union
 
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.app import MDApp
@@ -54,7 +55,7 @@ class ChatPanel(MDBoxLayout):
         self._screen_manager.add_widget(self.chat_settings_screen)
 
         self.chat_widgets = dict()
-        self.current_chat: GPTChat | None = None
+        self.current_chat: Union[GPTChat, None] = None
 
         for chat in self.db.chats:
             self.add_chat(chat)

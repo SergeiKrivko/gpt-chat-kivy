@@ -1,3 +1,5 @@
+from typing import Union
+
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
 from kivymd.app import MDApp
@@ -50,7 +52,7 @@ class ChatBubble(MDBoxLayout, StencilBehavior, TouchBehavior):
     def on_long_touch(self, *args):
         self.menu.open()
 
-    def _next_line(self) -> str | None:
+    def _next_line(self) -> Union[str, None]:
         self._current_line += 1
         if self._current_line >= len(self._lines):
             return None

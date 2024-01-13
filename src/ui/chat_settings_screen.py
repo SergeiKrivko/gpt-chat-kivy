@@ -1,3 +1,5 @@
+from typing import Union
+
 from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.card import MDSeparator
@@ -61,7 +63,7 @@ class ChatSettingsScreen(MDScreen):
 
         main_layout.add_widget(MDBoxLayout())
 
-        self._chat: GPTChat | None = None
+        self._chat: Union[GPTChat, None] = None
 
     def open_chat(self, chat: GPTChat):
         self._chat = chat
