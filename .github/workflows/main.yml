@@ -3,59 +3,59 @@ on: [push, pull_request]
 
 jobs:
   # Build job. Builds app for Android with Buildozer
-#  build-android:
-#    name: Build for Android
-#    runs-on: ubuntu-20.04
-#
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v2
-#        with:
-#          path: master
-#
-#      - name: Set up Python
-#        uses: actions/setup-python@v2
-#        with:
-#          python-version: 3.11
-#          architecture: x64
-#
-#      # used to cache dependencies with a timeout
-#      - name: Get Date
-#        id: get-date
-#        run: |
-#          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
-#        shell: bash
-#
-#      - name: Cache Buildozer global directory
-#        uses: actions/cache@v2
-#        with:
-#          path: .buildozer_global
-#          key: buildozer-global-${{ hashFiles('buildozer.spec') }} # Replace with your path
-#
-#      - name: Cache Buildozer local directory
-#        uses: actions/cache@v2
-#        with:
-#          path: .buildozer
-#          key: ${{ runner.os }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('buildozer.spec') }}
-#
-#      - name: Install dependencies
-#        run: |
-#          python -m pip install --upgrade pip
-#          pip install --upgrade Cython
-#
-#      - name: Build with Buildozer
-#        uses: ArtemSBulgakov/buildozer-action@v1
-#        id: buildozer
-#        with:
-#          repository_root: master
-#          workdir: .
-#          buildozer_version: stable
-#
-#      - name: Upload artifacts
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: package
-#          path: ${{ steps.buildozer.outputs.filename }}
+  build-android:
+    name: Build for Android
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: master
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+          architecture: x64
+
+      # used to cache dependencies with a timeout
+      - name: Get Date
+        id: get-date
+        run: |
+          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+        shell: bash
+
+      - name: Cache Buildozer global directory
+        uses: actions/cache@v2
+        with:
+          path: .buildozer_global
+          key: buildozer-global-${{ hashFiles('buildozer.spec') }} # Replace with your path
+
+      - name: Cache Buildozer local directory
+        uses: actions/cache@v2
+        with:
+          path: .buildozer
+          key: ${{ runner.os }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('buildozer.spec') }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade Cython
+
+      - name: Build with Buildozer
+        uses: ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
+        with:
+          repository_root: master
+          workdir: .
+          buildozer_version: stable
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: package
+          path: ${{ steps.buildozer.outputs.filename }}
 
 
   build-ios:
@@ -67,6 +67,10 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: master
+
+      - name: LS
+        run: |
+          ls
 
       - name: Set up Python
         uses: actions/setup-python@v2
