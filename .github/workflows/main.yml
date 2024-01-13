@@ -83,8 +83,8 @@ jobs:
           python3.11 -m pip install --user --upgrade kivy-ios buildozer
           python3.11 -m pip install --user --upgrade Cython==0.29.36
           
-          ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager --help
-          ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager "build-tools;29.0.0"
+          /home/runner/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager --help
+          /home/runner/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager "build-tools;29.0.0"
 
       - name: Build with buildozer
         run: |
