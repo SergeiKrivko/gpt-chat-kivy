@@ -75,7 +75,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
           pip3 install --user --upgrade Cython==0.29.33 virtualenv  # the --user should be removed if you do this in a venv
           export PATH=$PATH:~/.local/bin/
@@ -86,8 +85,7 @@ jobs:
 
       - name: Build with buildozer
         run: |
-          cd
-          ls
+          cd /home/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
           buildozer android debug
 
       - name: LS
