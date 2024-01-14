@@ -30,6 +30,7 @@ def simple_response(messages: list[dict[str: str]], model=None, **kwargs):
 
 
 async def async_response(messages: list[dict[str: str]], model=None, **kwargs):
+    print(messages)
     if model is None or model == 'default':
         model = g4f.models.default
     task = asyncio.create_task(g4f.ChatCompletion.create_async(

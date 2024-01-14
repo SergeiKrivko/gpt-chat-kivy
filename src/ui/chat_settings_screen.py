@@ -1,13 +1,12 @@
 from typing import Union
 
 from kivy.metrics import dp
-from kivy.uix.slider import Slider
+from kivymd.uix.slider import MDSlider
 from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.card import MDSeparator
 from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
-from kivymd.uix.slider import MDSlider
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.toolbar import MDTopAppBar
 
@@ -45,19 +44,19 @@ class ChatSettingsScreen(MDScreen):
         layout.add_widget(MDSeparator())
 
         layout.add_widget(MDLabel(text="Used messages:", adaptive_height=True))
-        self.used_messages_edit = Slider(min=1, max=10)
+        self.used_messages_edit = MDSlider(min=1, max=10, size_hint_y=None, height=dp(30))
         layout.add_widget(self.used_messages_edit)
 
         layout.add_widget(MDSeparator())
 
         layout.add_widget(MDLabel(text="Saved messages:", adaptive_height=True))
-        self.saved_messages_edit = Slider(min=50, max=1000)
+        self.saved_messages_edit = MDSlider(min=50, max=1000, size_hint_y=None, height=dp(30))
         layout.add_widget(self.saved_messages_edit)
 
         layout.add_widget(MDSeparator())
 
         layout.add_widget(MDLabel(text="Temperature:", adaptive_height=True))
-        self.temperature_edit = Slider(min=0, max=100)
+        self.temperature_edit = MDSlider(min=0, max=100, size_hint_y=None, height=dp(30))
         layout.add_widget(self.temperature_edit)
 
         main_layout.add_widget(MDBoxLayout())

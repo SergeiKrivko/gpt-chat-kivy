@@ -123,8 +123,10 @@ class ChatWidget(MDScreen):
             task = asyncio.create_task(async_response(messages))
             await task
             text = task.result()
+            print(f"Success: {repr(text)}")
             self.new_message('assistant', text)
         except Exception as ex:
+            print(f"Error: {ex.__class__.__name__}: {ex}")
             Snackbar(
                 text=f"{ex.__class__.__name__}: {ex}",
                 snackbar_animation_dir='Top',

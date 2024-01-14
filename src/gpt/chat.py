@@ -135,22 +135,22 @@ class GPTChat:
     @property
     def used_messages(self):
         self._db.cursor.execute(f"""SELECT used_messages from Chats WHERE id = {self._id}""")
-        used_messages = self._db.cursor.fetchone()[0]
+        used_messages = int(self._db.cursor.fetchone()[0])
         return used_messages
 
     @used_messages.setter
     def used_messages(self, used_messages):
-        self._db.cursor.execute(f"""UPDATE Chats SET used_messages = {used_messages} WHERE id = {self._id}""")
+        self._db.cursor.execute(f"""UPDATE Chats SET used_messages = {int(used_messages)} WHERE id = {self._id}""")
 
     @property
     def saved_messages(self):
         self._db.cursor.execute(f"""SELECT saved_messages from Chats WHERE id = {self._id}""")
-        saved_messages = self._db.cursor.fetchone()[0]
+        saved_messages = int(self._db.cursor.fetchone()[0])
         return saved_messages
 
     @saved_messages.setter
     def saved_messages(self, saved_messages):
-        self._db.cursor.execute(f"""UPDATE Chats SET saved_messages = {saved_messages} WHERE id = {self._id}""")
+        self._db.cursor.execute(f"""UPDATE Chats SET saved_messages = {int(saved_messages)} WHERE id = {self._id}""")
 
     @property
     def temperature(self):
