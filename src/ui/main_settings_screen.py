@@ -1,3 +1,4 @@
+from kivy.metrics import dp
 from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.card import MDSeparator
@@ -22,7 +23,8 @@ class MainSettingsScreen(MDScreen):
         main_layout.add_widget(self.top_bar)
 
         layout = MDBoxLayout(orientation='vertical', adaptive_height=True)
-        layout.padding = (40, 20, 40, 40)
+        layout.padding = dp(20)
+        layout.spacing = dp(15)
         main_layout.add_widget(layout)
 
         self.dark_theme_item = SwitchItem("Dark theme")

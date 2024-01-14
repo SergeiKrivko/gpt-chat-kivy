@@ -127,6 +127,7 @@ class ChatWidget(MDScreen):
         except Exception as ex:
             Snackbar(
                 text=f"{ex.__class__.__name__}: {ex}",
+                snackbar_animation_dir='Top',
             ).open()
 
 

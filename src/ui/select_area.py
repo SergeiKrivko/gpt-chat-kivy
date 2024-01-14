@@ -12,10 +12,9 @@ class SelectionItem(MDBoxLayout):
         self._values = values
         self._current = current
         self.adaptive_height = True
-        self.padding = 10
 
         self.label = MDLabel(text=name)
-        self.label.padding = [dp(12), dp(12)]
+        self.label.padding = dp(12)
         self.label.adaptive_height = True
         self.add_widget(self.label)
 
