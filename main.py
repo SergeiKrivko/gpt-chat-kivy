@@ -1,12 +1,8 @@
 import asyncio
 
-kivy_version = '0.0.0'
-
 try:
     from kivy.uix.boxlayout import BoxLayout
     from kivymd.app import MDApp
-    import kivy
-    kivy_version = kivy.version
     from kivymd.uix.label import MDLabel
 
     from kivy.core.window import Window
@@ -37,7 +33,7 @@ class MainApp(MDApp):
                 raise ex
 
         if error:
-            main_layout.add_widget(MDLabel(text=error + f"\n\nKivy version: {kivy_version}"))
+            main_layout.add_widget(MDLabel(text=error))
         else:
             main_layout.add_widget(self.main_widget)
 
