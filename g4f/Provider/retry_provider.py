@@ -68,25 +68,30 @@ class RetryProvider(AsyncProvider):
         providers = self.providers
         if self.shuffle:
             random.shuffle(providers)
-        
+
         self.exceptions: Dict[str, Exception] = {}
         for provider in providers:
             try:
-                return await asyncio.wait_for(
+                res = await asyncio.wait_for(
                     provider.create_async(model, messages, **kwargs),
                     timeout=kwargs.get("timeout", 60)
                 )
+
+                print("\n".join([
+                    f"{p}: {exception.__class__.__name__}: {exception}" for p, exception in self.exceptions.items()
+                ]))
+                return res
             except Exception as e:
                 self.exceptions[provider.__name__] = e
                 if debug.logging:
                     print(f"{provider.__name__}: {e.__class__.__name__}: {e}")
-    
+
         self.raise_exceptions()
-    
+
     def raise_exceptions(self) -> None:
         if self.exceptions:
             raise RetryProviderError("RetryProvider failed:\n" + "\n".join([
                 f"{p}: {exception.__class__.__name__}: {exception}" for p, exception in self.exceptions.items()
             ]))
-        
+
         raise RetryNoProviderError("No provider found")

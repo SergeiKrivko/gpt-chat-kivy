@@ -1,9 +1,11 @@
 from kivymd.app import MDApp
 from kivymd.material_resources import dp
 from kivymd.uix.bottomsheet import MDListBottomSheet
+from kivymd.uix.bottomsheet.bottomsheet import ListBottomSheetIconLeft
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDFillRoundFlatButton
 from kivymd.uix.label import MDLabel
+from kivymd.uix.list import OneLineIconListItem, OneLineListItem
 
 
 class SelectionItem(MDBoxLayout):
@@ -27,8 +29,12 @@ class SelectionItem(MDBoxLayout):
 
     def _on_clicked(self, *args):
         bottom_sheet_menu = MDListBottomSheet()
-        for el in self._values:
-            bottom_sheet_menu.add_item(el, lambda x, y=el: self._set_current(y))
+        try:
+            bottom_sheet_menu.add_item = _add_item
+            for el in self._values:
+                bottom_sheet_menu.add_item(bottom_sheet_menu, el, lambda x, y=el: self._set_current(y))
+        except Exception as ex:
+            print(f"{ex.__class__.__name__}: {ex}")
         bottom_sheet_menu.open()
 
     def _set_current(self, text):
@@ -44,6 +50,22 @@ class SelectionItem(MDBoxLayout):
     @current.setter
     def current(self, text):
         self._set_current(text)
+
+
+def _add_item(self, text, callback, icon=None):
+    """
+    :arg text: element text;
+    :arg callback: function that will be called when clicking on an item;
+    :arg icon: which will be used as an icon to the left of the item;
+    """
+
+    if icon:
+        item = OneLineIconListItem(text=text, on_release=callback)
+        item.add_widget(ListBottomSheetIconLeft(icon=icon))
+    else:
+        item = OneLineListItem(text=text, on_release=callback)
+    item.bind(on_release=lambda x: self.dismiss())
+    self.sheet_list.ids.box_sheet_list.add_widget(item)
 
 
 class SelectArea(MDListBottomSheet):

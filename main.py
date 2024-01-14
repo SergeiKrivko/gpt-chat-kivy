@@ -9,6 +9,11 @@ try:
     Window.fullscreen = False
     Window.softinput_mode = 'resize'
 
+    import certifi
+    import os
+
+    os.environ['SSL_CERT_FILE'] = certifi.where()
+
     from src import config
     from src.chat import ChatPanel
 except Exception as ex:
