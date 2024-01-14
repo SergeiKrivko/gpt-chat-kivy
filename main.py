@@ -1,9 +1,12 @@
 import asyncio
 
+kivy_version = '0.0.0'
+
 try:
     from kivy.uix.boxlayout import BoxLayout
     from kivymd.app import MDApp
     import kivy
+    kivy_version = kivy.version
     from kivymd.uix.label import MDLabel
 
     from kivy.core.window import Window
@@ -14,6 +17,7 @@ try:
     from src.chat import ChatPanel
 except Exception as ex:
     error = f"{ex.__class__.__name__}: {ex}"
+    raise ex
 else:
     error = ''
 
@@ -30,9 +34,10 @@ class MainApp(MDApp):
                 self.main_widget = ChatPanel(self)
             except Exception as ex:
                 error = f"{ex.__class__.__name__}: {ex}"
+                raise ex
 
         if error:
-            main_layout.add_widget(MDLabel(text=error + f"\n\nKivy version: {kivy._version.__version__}"))
+            main_layout.add_widget(MDLabel(text=error + f"\n\nKivy version: {kivy_version}"))
         else:
             main_layout.add_widget(self.main_widget)
 
