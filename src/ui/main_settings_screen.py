@@ -41,10 +41,20 @@ class MainSettingsScreen(MDScreen):
 
         layout.add_widget(MDSeparator())
 
+        self.async_item = SwitchItem("Async")
+        self.async_item.set_state(self.sm.get('async', True))
+        self.async_item.on_state_changed = self.set_async
+        layout.add_widget(self.async_item)
+
+        layout.add_widget(MDSeparator())
+
         main_layout.add_widget(MDBoxLayout())
 
     def set_dark_theme(self, dark):
         self.sm.set('dark', dark)
+
+    def set_async(self, dark):
+        self.sm.set('async', dark)
 
     def set_theme_color(self, color):
         self.sm.set('theme', color)

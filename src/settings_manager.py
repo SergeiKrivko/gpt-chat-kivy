@@ -9,6 +9,7 @@ class SettingsManager:
     def __init__(self, path):
         super().__init__()
         self._path = os.path.join(path, 'settings.json')
+        self.temp_dir = os.path.join(path, 'temp')
         self._settings: dict = read_json(self._path)
 
     def get(self, key, default=None):

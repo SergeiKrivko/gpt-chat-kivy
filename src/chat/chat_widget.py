@@ -11,17 +11,18 @@ from kivymd.uix.textfield import MDTextField
 from kivymd.uix.toolbar import MDTopAppBar
 
 from src.chat.chat_bubble import ChatBubble
-from src.gpt import async_response
+from src.gpt import async_response, simple_response
 from src.gpt.chat import GPTChat
 from src.gpt.message import GPTMessage
 
 
 class ChatWidget(MDScreen):
-    def __init__(self, app: MDApp, temp_dir, chat: GPTChat):
+    def __init__(self, app: MDApp, sm, chat: GPTChat):
         super().__init__(name=f'Chat{chat.id}')
         self.chat = chat
         self.app = app
-        self.temp_dir = temp_dir
+        self.sm = sm
+        self.temp_dir = self.sm.temp_dir
 
         main_layout = MDBoxLayout(orientation='vertical')
         self.add_widget(main_layout)
@@ -120,9 +121,12 @@ class ChatWidget(MDScreen):
 
     async def _send_message(self, messages):
         try:
-            task = asyncio.create_task(async_response(messages))
-            await task
-            text = task.result()
+            if self.sm.get('async'):
+                task = asyncio.create_task(async_response(messages))
+                await task
+                text = task.result()
+            else:
+                text = simple_response(messages)
             print(f"Success: {repr(text)}")
             self.new_message('assistant', text)
         except Exception as ex:

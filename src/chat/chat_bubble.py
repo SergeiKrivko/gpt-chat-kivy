@@ -228,7 +228,7 @@ class _CodeBox(MDLabel, StencilBehavior):
         self.code = code
 
         self.text = code
-        # self.padding = dp(8)
+        self.padding = dp(8)
         self.adaptive_height = True
         self.font_name = 'C:\\Windows\\Fonts\\consola.ttf'
         self.radius = dp(10)

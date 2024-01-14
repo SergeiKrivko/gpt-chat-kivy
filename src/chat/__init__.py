@@ -61,7 +61,7 @@ class ChatPanel(MDBoxLayout):
             self.add_chat(chat)
 
     def add_chat(self, chat: GPTChat):
-        widget = ChatWidget(self.app, f"{self.app_data_dir}/temp", chat)
+        widget = ChatWidget(self.app, self.sm, chat)
         widget.top_panel.on_chat_closed = self.hide_chat
         widget.top_panel.on_settings_clicked = self.open_chat_settings
         self._screen_manager.add_widget(widget)
