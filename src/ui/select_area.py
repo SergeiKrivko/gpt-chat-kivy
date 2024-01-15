@@ -1,18 +1,22 @@
+from kivy.clock import Clock
+from kivy.core.window import Window
 from kivymd.app import MDApp
 from kivymd.material_resources import dp
 from kivymd.uix.bottomsheet import MDListBottomSheet
-from kivymd.uix.bottomsheet.bottomsheet import ListBottomSheetIconLeft
+from kivymd.uix.bottomsheet.bottomsheet import MDBottomSheet, MDBottomSheetContent
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDFillRoundFlatButton
 from kivymd.uix.label import MDLabel
-from kivymd.uix.list import OneLineIconListItem, OneLineListItem
+from kivymd.uix.list import OneLineIconListItem, OneLineListItem, MDList
+from kivymd.uix.scrollview import MDScrollView
 
 
 class SelectionItem(MDBoxLayout):
-    def __init__(self, name, values: list[str], current=''):
+    def __init__(self, parent, name, values: list[str], current=''):
         super().__init__()
         self._values = values
         self._current = current
+        self._parent = parent
         self.adaptive_height = True
 
         self.label = MDLabel(text=name)
@@ -27,17 +31,40 @@ class SelectionItem(MDBoxLayout):
 
         self.on_current_changed = None
 
-    def _on_clicked(self, *args):
-        bottom_sheet_menu = MDListBottomSheet()
-        try:
-            bottom_sheet_menu.add_item = _add_item
+        # def on_start(self):
+        def on_start(*args):
+            bottom_sheet = MDBottomSheet(
+                id="bottom_sheet",
+                size_hint_y=None,
+                bg_color="grey",
+            )
+            self._bottom_sheet = bottom_sheet
+
+            content = MDBottomSheetContent()
+            content.padding = [0, dp(16), 0, 0]
+            bottom_sheet.add_widget(content)
+            md_list = MDList(adaptive_height=True)
+            content.add_widget(sv := MDScrollView(md_list))
             for el in self._values:
-                bottom_sheet_menu.add_item(bottom_sheet_menu, el, lambda x, y=el: self._set_current(y))
-        except Exception as ex:
-            print(f"{ex.__class__.__name__}: {ex}")
-        bottom_sheet_menu.open()
+                md_list.add_widget(OneLineListItem(
+                    text=el,
+                    on_release=lambda x, y=el: self._set_current(y),
+                    _no_ripple_effect=True))
+
+            self._parent.add_widget(bottom_sheet)
+            height = min(Window.height - dp(150), dp(48) * len(self._values) + dp(12))
+            bottom_sheet.default_opening_height = height
+            bottom_sheet.height = height
+            sv.size_hint_y = None
+            sv.height = height - dp(12)
+
+        Clock.schedule_once(on_start, 2)
+
+    def _on_clicked(self, *args):
+        self._bottom_sheet.open()
 
     def _set_current(self, text):
+        self._bottom_sheet.dismiss()
         self._current = text
         self.button.text = text
         if self.on_current_changed:
@@ -50,48 +77,3 @@ class SelectionItem(MDBoxLayout):
     @current.setter
     def current(self, text):
         self._set_current(text)
-
-
-def _add_item(self, text, callback, icon=None):
-    """
-    :arg text: element text;
-    :arg callback: function that will be called when clicking on an item;
-    :arg icon: which will be used as an icon to the left of the item;
-    """
-
-    if icon:
-        item = OneLineIconListItem(text=text, on_release=callback)
-        item.add_widget(ListBottomSheetIconLeft(icon=icon))
-    else:
-        item = OneLineListItem(text=text, on_release=callback)
-    item.bind(on_release=lambda x: self.dismiss())
-    self.sheet_list.ids.box_sheet_list.add_widget(item)
-
-
-class SelectArea(MDListBottomSheet):
-    def __init__(self, app: MDApp, values: list[str]):
-        super().__init__()
-        self.app = app
-        self.size_hint_y = None
-        self.type = 'standard'
-        self.height = dp(20)
-
-        self.bg_color = 'grey'
-
-        for el in values:
-            self._add_item(el)
-
-        self.on_selected = None
-
-    def show(self):
-        self.open()
-
-    def _add_item(self, text):
-        self.add_item(text, lambda *args: self._on_selected(text))
-
-    def _on_selected(self, text):
-        print(f"selected \"{text}\"")
-        self.dismiss()
-        if self.on_selected is not None:
-            self.on_selected(text)
-

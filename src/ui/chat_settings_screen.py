@@ -38,7 +38,7 @@ class ChatSettingsScreen(MDScreen):
 
         layout.add_widget(MDSeparator())
 
-        self.model_edit = SelectionItem("Model", ['default'] + g4f.models.Model.__all__())
+        self.model_edit = SelectionItem(self, "Model", ['default'] + g4f.models.Model.__all__())
         layout.add_widget(self.model_edit)
 
         layout.add_widget(MDSeparator())

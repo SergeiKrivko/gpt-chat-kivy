@@ -4,9 +4,10 @@ from kivymd.app import MDApp
 from kivymd.material_resources import dp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton
+from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.scrollview import MDScrollView
-from kivymd.uix.snackbar import Snackbar
+from kivymd.uix.snackbar import MDSnackbar
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.toolbar import MDTopAppBar
 
@@ -48,7 +49,7 @@ class ChatWidget(MDScreen):
 
         bottom_layout = MDBoxLayout(size_hint_y=None, adaptive_height=True)
         bottom_layout.padding = (dp(15), dp(15), dp(15), dp(25))
-        bottom_layout.spacing = 15
+        bottom_layout.spacing = dp(10)
         bottom_layout.md_bg_color = app.theme_cls.primary_color
         main_layout.add_widget(bottom_layout)
 
@@ -131,9 +132,13 @@ class ChatWidget(MDScreen):
             self.new_message('assistant', text)
         except Exception as ex:
             print(f"Error: {ex.__class__.__name__}: {ex}")
-            Snackbar(
-                text=f"{ex.__class__.__name__}: {ex}",
-                snackbar_animation_dir='Top',
+            MDSnackbar(
+                MDLabel(
+                    text=f"Error: {ex.__class__.__name__}",
+                ),
+                y=dp(100),
+                pos_hint={"center_x": 0.5},
+                size_hint_x=0.8,
             ).open()
 
 

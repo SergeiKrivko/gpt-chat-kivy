@@ -34,7 +34,7 @@ class MainSettingsScreen(MDScreen):
 
         layout.add_widget(MDSeparator())
 
-        self.color_box = SelectionItem("Color", ['Blue', 'Green', 'Red', 'Pink', 'Yellow', 'Orange'],
+        self.color_box = SelectionItem(self, "Color", ['Blue', 'Green', 'Red', 'Pink', 'Yellow', 'Orange'],
                                        self.sm.get('theme', 'Blue'))
         self.color_box.on_current_changed = self.set_theme_color
         layout.add_widget(self.color_box)

@@ -1,5 +1,7 @@
 import asyncio
 
+from kivy.uix.widget import Widget
+
 try:
     from kivy.uix.boxlayout import BoxLayout
     from kivymd.app import MDApp
@@ -41,6 +43,19 @@ class MainApp(MDApp):
             main_layout.add_widget(self.main_widget)
 
         return main_layout
+
+    # def on_start(self):
+    #     def on_start(widget):
+    #         if not hasattr(widget, '__dict__'):
+    #             return
+    #         print(widget, widget.__dict__)
+    #         for key, item in widget.__dict__.items():
+    #             if isinstance(item, Widget):
+    #                 if hasattr(item, 'on_start'):
+    #                     item.on_start()
+    #                 else:
+    #                     on_start(item)
+    #     on_start(self.main_widget)
 
 
 def update_viewport(self=Window):
