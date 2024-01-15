@@ -74,7 +74,8 @@ jobs:
           python3.11 -m venv venv
           venv/bin/python3.11 -m pip install --upgrade kivy-ios buildozer
           venv/bin/python3.11 -m pip install --upgrade Cython==0.29.36
-          ln -s venv/bin/python3.11/bin/Cython /usr/bin/Cython
+          ls venv/bin
+          sudo ln -s venv/bin/Cython /usr/bin/Cython
           
           brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer gstreamer automake
 
