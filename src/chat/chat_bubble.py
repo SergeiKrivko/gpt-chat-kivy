@@ -35,22 +35,23 @@ class ChatBubble(MDBoxLayout, StencilBehavior, TouchBehavior):
         self.radius = (dp(10), dp(10), 0 if self.side == 'right' else dp(10), 0 if self.side == 'left' else dp(10))
         self.pos_hint = {'center_x': 0.4 if self.side == 'left' else 0.6}
 
-        menu_items = [
-            {
-                "viewclass": "OneLineListItem",
-                'text': f"Item {i}",
-                # 'icon': 'delete',
-                'on_release': lambda x=f"Item {i}": print(x),
-                # 'height': dp(42),
-            } for i in range(5)
-        ]
-        self.menu = MDDropdownMenu(caller=self, width_mult=4, items=menu_items)
+        # menu_items = [
+        #     {
+        #         'text': f"Item {i}",
+        #         'icon': 'delete',
+        #         'on_release': lambda x=f"Item {i}": print(x),
+        #         # 'height': dp(42),
+        #     } for i in range(5)
+        # ]
+        # self.menu = MDDropdownMenu(caller=self, items=menu_items)
+        self.on_menu = None
 
         self._last_items = dict()
         self._apply_text()
 
     def on_long_touch(self, *args):
-        self.menu.open()
+        # self.menu.open()
+        self.on_menu()
 
     def _next_line(self) -> Union[str, None]:
         self._current_line += 1

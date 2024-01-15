@@ -34,7 +34,6 @@ class SelectionItem(MDBoxLayout):
         # def on_start(self):
         def on_start(*args):
             bottom_sheet = MDBottomSheet(
-                id="bottom_sheet",
                 size_hint_y=None,
                 bg_color="grey",
             )

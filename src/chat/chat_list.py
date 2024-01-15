@@ -55,12 +55,14 @@ class ChatListWidgetItem(MDCardSwipe):
         self.app = app
         self.size_hint_y: None
         self.adaptive_height = True
+        self.radius = 0
 
         self.back_box = MDCardSwipeLayerBox()
         self.add_widget(self.back_box)
         self.back_box.bg_color = self.app.theme_cls.bg_normal
 
         self.front_box = MDCardSwipeFrontBox()
+        self.front_box.radius = 0
         self.add_widget(self.front_box)
         self.type_swipe = 'auto'
 

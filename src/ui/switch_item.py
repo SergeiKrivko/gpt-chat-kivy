@@ -8,11 +8,11 @@ class SwitchItem(MDBoxLayout):
     def __init__(self, text):
         super().__init__()
         self.adaptive_height = True
-        self.padding = (0, 0, 10, 0)
+        self.padding = (0, 0, dp(25), 0)
 
         self.label = MDLabel(text=text)
-        self.label.padding = [dp(12), dp(12)]
-        self.label.adaptive_height = True
+        self.label.valign = 'center'
+        # self.label.adaptive_height = True
         self.add_widget(self.label)
 
         self.switch = _Switch()

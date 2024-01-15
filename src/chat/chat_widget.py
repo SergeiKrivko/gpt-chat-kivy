@@ -1,10 +1,15 @@
 import asyncio
 
+from kivy.clock import Clock
+from kivy.core.clipboard import Clipboard
+from kivy.core.window import Window
 from kivymd.app import MDApp
 from kivymd.material_resources import dp
+from kivymd.uix.bottomsheet import MDBottomSheet, MDBottomSheetContent
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton
 from kivymd.uix.label import MDLabel
+from kivymd.uix.list import MDList, OneLineIconListItem, IconLeftWidget
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.scrollview import MDScrollView
 from kivymd.uix.snackbar import MDSnackbar
@@ -68,6 +73,12 @@ class ChatWidget(MDScreen):
         self.input_area.line_color_focus = self.app.theme_cls.bg_normal
         bottom_layout.add_widget(self.input_area)
 
+        def on_start(*args):
+            self._bottom_sheet = _MessageOptionsPanel(self.app, self, self.chat)
+            self._bottom_sheet.on_delete = self.delete_message
+            self._bottom_sheet.on_markdown_copy = lambda message: Clipboard.copy(message.content)
+        Clock.schedule_once(on_start, 2)
+
         self.button_send = MDIconButton(icon='send')
         self.button_send.bind(on_release=self.send_message)
         bottom_layout.add_widget(self.button_send)
@@ -91,6 +102,7 @@ class ChatWidget(MDScreen):
         bubble = ChatBubble(self.app, self.temp_dir, message)
         self._bubbles[message.id] = bubble
         self._bubbles_list.append(bubble)
+        bubble.on_menu = lambda: self._bottom_sheet.open_message(message)
         self.scroll_layout.add_widget(bubble)
         self._last_height = self.scroll_layout.height
         return bubble
@@ -99,6 +111,7 @@ class ChatWidget(MDScreen):
         bubble = ChatBubble(self.app, self.temp_dir, message)
         self._bubbles[message.id] = bubble
         self._bubbles_list.insert(0, bubble)
+        bubble.on_menu = lambda: self._bottom_sheet.open_message(message)
         self.scroll_layout.clear_widgets()
         for el in self._bubbles_list:
             self.scroll_layout.add_widget(el)
@@ -141,6 +154,14 @@ class ChatWidget(MDScreen):
                 size_hint_x=0.8,
             ).open()
 
+    def delete_message(self, message):
+        bubble = self._bubbles.pop(message.id)
+        self._bubbles_list.remove(bubble)
+        self.chat.delete_message(message.id)
+        self.scroll_layout.clear_widgets()
+        for el in self._bubbles_list:
+            self.scroll_layout.add_widget(el)
+
 
 class CustomScrollView(MDScrollView):
     def on_scroll_move(self, touch):
@@ -161,3 +182,84 @@ class ChatTopPanel(MDTopAppBar):
     def close_chat(self, *args):
         if self.on_chat_closed is not None:
             self.on_chat_closed()
+
+
+class _MessageOptionsPanel(MDBottomSheet):
+    def __init__(self, app: MDApp, parent: MDScreen, chat: GPTChat):
+        super().__init__(size_hint_y=None, type='modal')
+        self._chat = chat
+        self._parent = parent
+        self.bg_color = app.theme_cls.bg_light
+
+        content = MDBottomSheetContent()
+        content.padding = [0, dp(16), 0, 0]
+        self.add_widget(content)
+        layout = MDBoxLayout(orientation='vertical', padding=[0, dp(20), 0, 0])
+        content.add_widget(layout)
+
+        self._label = MDLabel(adaptive_height=True, valign='top', padding=dp(15))
+        layout.add_widget(sv := MDScrollView(self._label, size_hint_y=None))
+
+        md_list = MDList()
+        layout.add_widget(md_list)
+
+        self.on_delete = None
+        self.on_reply = None
+        self.on_copy = None
+        self.on_markdown_copy = None
+        self._message = None
+
+        md_list.add_widget(OneLineIconListItem(
+            IconLeftWidget(icon='delete'),
+            text='Delete',
+            on_press=lambda x: self._on_delete(),
+            _no_ripple_effect=True))
+        md_list.add_widget(OneLineIconListItem(
+            IconLeftWidget(icon='reply'),
+            text='Reply',
+            on_press=lambda x: self._on_reply(),
+            _no_ripple_effect=True))
+        md_list.add_widget(OneLineIconListItem(
+            IconLeftWidget(icon='content-copy'),
+            text='Copy',
+            on_press=lambda x: self._on_copy(),
+            _no_ripple_effect=True))
+        md_list.add_widget(OneLineIconListItem(
+            IconLeftWidget(icon='language-markdown'),
+            text='Copy as Markdown',
+            on_press=lambda x: self._on_markdown_copy(),
+            _no_ripple_effect=True))
+
+        height = Window.height - dp(150)
+        self.default_opening_height = height
+        self.height = height
+        sv.height = height - (dp(48) * 4 + dp(12))
+        md_list.size_hint_y = None
+        md_list.height = dp(48) * 4 + dp(12)
+
+        self._parent.add_widget(self)
+
+    def _on_delete(self):
+        self.dismiss()
+        if self.on_delete:
+            self.on_delete(self._message)
+
+    def _on_reply(self):
+        self.dismiss()
+        if self.on_reply:
+            self.on_reply(self._message)
+
+    def _on_copy(self):
+        self.dismiss()
+        if self.on_copy:
+            self.on_copy(self._message)
+
+    def _on_markdown_copy(self):
+        self.dismiss()
+        if self.on_markdown_copy:
+            self.on_markdown_copy(self._message)
+
+    def open_message(self, message: GPTMessage):
+        self._message = message
+        self._label.text = message.content
+        self.open()
