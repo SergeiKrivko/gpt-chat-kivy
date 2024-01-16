@@ -70,6 +70,7 @@ jobs:
       - name: Install dependencies
         run: |
           rm /usr/local/bin/python3.12
+          ls /usr/local/bin
           
           python3 -m pip install --upgrade pip virtualenv
           python3 -m pip install --upgrade kivy-ios buildozer
@@ -80,7 +81,7 @@ jobs:
       - name: Build with buildozer
         run: |
           cd /Users/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
-          venv/bin/python3 -m buildozer ios debug
+          python3 -m buildozer ios debug
 
       - name: LS
         run: |
