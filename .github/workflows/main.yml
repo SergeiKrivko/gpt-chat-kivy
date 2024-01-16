@@ -69,21 +69,18 @@ jobs:
 
       - name: Install dependencies
         run: |
-          which python3
-          which python3.11
-          which python3.12
-          echo $PATH
+          rm /usr/local/bin/python3.12
           
-          python3.11 -m pip install --upgrade pip virtualenv
-          python3.11 -m pip install --upgrade kivy-ios buildozer
-          python3.11 -m pip install --upgrade Cython==0.29.36
+          python3 -m pip install --upgrade pip virtualenv
+          python3 -m pip install --upgrade kivy-ios buildozer
+          python3 -m pip install --upgrade Cython==0.29.36
           
           brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer gstreamer automake cython
 
       - name: Build with buildozer
         run: |
           cd /Users/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
-          venv/bin/python3.11 -m buildozer ios debug
+          venv/bin/python3 -m buildozer ios debug
 
       - name: LS
         run: |
