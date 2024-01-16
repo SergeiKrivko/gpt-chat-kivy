@@ -37,7 +37,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3, kivy==2.2.1, https://github.com/kivymd/KivyMD/archive/master.zip, pillow, aiohttp, requests, urllib3, charset-normalizer==2.1.1, aiosignal, attrs, certifi, docutils, idna, multidict, pygments, setuptools, yarl, async-timeout, frozenlist, openssl, hostpython2
+requirements = python3, kivy==2.2.1, https://github.com/kivymd/KivyMD/archive/master.zip, pillow, aiohttp, requests, urllib3, charset-normalizer==2.1.1, aiosignal, attrs, certifi, docutils, idna, multidict, pygments, setuptools, yarl, async-timeout, frozenlist
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
