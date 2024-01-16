@@ -75,10 +75,6 @@ jobs:
           python3.11 -m venv venv
           source venv/bin/activate
           
-          witch python3
-          witch python3.11
-          witch python3.12
-          
           venv/bin/python3.11 -m pip install --upgrade kivy-ios buildozer
           venv/bin/python3.11 -m pip install --upgrade Cython==0.29.36
           
