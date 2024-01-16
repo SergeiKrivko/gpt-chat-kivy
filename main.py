@@ -7,13 +7,15 @@ try:
     import ssl
     ssl._create_default_https_context = ssl._create_unverified_context
 
+    from kivy.config import Config
     from kivy.uix.boxlayout import BoxLayout
     from kivymd.app import MDApp
     from kivymd.uix.label import MDLabel
 
     from kivy.core.window import Window
     Window.fullscreen = False
-    Window.softinput_mode = 'resize'
+    Window.keyboard_anim_args = {"d": .2, "t": "in_out_expo"}
+    Window.softinput_mode = "below_target"
 
     from src import config
     from src.chat import ChatPanel
@@ -26,12 +28,12 @@ else:
 class MainApp(MDApp):
     def build(self):
         main_layout = BoxLayout(orientation="vertical")
-        self.title = config.APP_NAME
 
         global error
 
         if not error:
             try:
+                self.title = config.APP_NAME
                 self.main_widget = ChatPanel(self)
             except Exception as ex:
                 error = f"{ex.__class__.__name__}: {ex}"
