@@ -194,11 +194,11 @@ class _MessageOptionsPanel(MDBottomSheet):
         content = MDBottomSheetContent()
         content.padding = [0, dp(16), 0, 0]
         self.add_widget(content)
-        layout = MDBoxLayout(orientation='vertical', padding=[0, dp(20), 0, 0])
+        layout = MDBoxLayout(orientation='vertical', padding=[0, dp(30), 0, 0])
         content.add_widget(layout)
 
-        self._label = MDLabel(adaptive_height=True, valign='top', padding=dp(15))
-        layout.add_widget(sv := MDScrollView(self._label, size_hint_y=None))
+        self._label = MDLabel(valign='top', padding=dp(10), size_hint_y=None)
+        layout.add_widget(self._label)
 
         md_list = MDList()
         layout.add_widget(md_list)
@@ -212,28 +212,28 @@ class _MessageOptionsPanel(MDBottomSheet):
         md_list.add_widget(OneLineIconListItem(
             IconLeftWidget(icon='delete'),
             text='Delete',
-            on_press=lambda x: self._on_delete(),
+            on_release=lambda x: self._on_delete(),
             _no_ripple_effect=True))
         md_list.add_widget(OneLineIconListItem(
             IconLeftWidget(icon='reply'),
             text='Reply',
-            on_press=lambda x: self._on_reply(),
+            on_release=lambda x: self._on_reply(),
             _no_ripple_effect=True))
         md_list.add_widget(OneLineIconListItem(
             IconLeftWidget(icon='content-copy'),
             text='Copy',
-            on_press=lambda x: self._on_copy(),
+            on_release=lambda x: self._on_copy(),
             _no_ripple_effect=True))
         md_list.add_widget(OneLineIconListItem(
             IconLeftWidget(icon='language-markdown'),
             text='Copy as Markdown',
-            on_press=lambda x: self._on_markdown_copy(),
+            on_release=lambda x: self._on_markdown_copy(),
             _no_ripple_effect=True))
 
         height = Window.height - dp(150)
         self.default_opening_height = height
         self.height = height
-        sv.height = height - (dp(48) * 4 + dp(12))
+        self._label.height = height - (dp(48) * 4 + dp(12))
         md_list.size_hint_y = None
         md_list.height = dp(48) * 4 + dp(12)
 
@@ -259,7 +259,34 @@ class _MessageOptionsPanel(MDBottomSheet):
         if self.on_markdown_copy:
             self.on_markdown_copy(self._message)
 
+    def on_touch_down(self, touch):
+        if self.type == "standard":
+            super().on_touch_down(touch)
+
+        if self.collide_point(touch.x, touch.y):
+            if self.type == "standard":
+                return True
+            elif self.type == "modal":
+                return super().on_touch_down(touch)
+
+    def on_touch_up(self, touch):
+        self._diff_between_touch_height_sheet = 0
+        self._alpha_channel_value = 0
+
+    def _on_touch_down_layer(self, instance, touch):
+        if instance.collide_point(touch.x, touch.y):
+            if self._touch_sheet and self.state == "open":
+                return True
+
+        if self.state == "open" and not self.auto_dismiss:
+            return True
+        elif self.state == "open" and self.auto_dismiss:
+            self.dismiss()
+            return True
+
     def open_message(self, message: GPTMessage):
         self._message = message
         self._label.text = message.content
+        if not self._label.text:
+            self._label.text = '<Empty>'
         self.open()
