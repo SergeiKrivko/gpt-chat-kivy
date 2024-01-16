@@ -1,8 +1,12 @@
 import asyncio
 
-from kivy.uix.widget import Widget
-
 try:
+    import certifi
+    import os
+    os.environ['SSL_CERT_FILE'] = certifi.where()
+    import ssl
+    ssl._create_default_https_context = ssl._create_unverified_context
+
     from kivy.uix.boxlayout import BoxLayout
     from kivymd.app import MDApp
     from kivymd.uix.label import MDLabel
@@ -10,11 +14,6 @@ try:
     from kivy.core.window import Window
     Window.fullscreen = False
     Window.softinput_mode = 'resize'
-
-    import certifi
-    import os
-
-    os.environ['SSL_CERT_FILE'] = certifi.where()
 
     from src import config
     from src.chat import ChatPanel
@@ -101,7 +100,7 @@ def update_viewport(self=Window):
 
 async def main():
     app = MainApp()
-    Window.update_viewport = update_viewport
+    # Window.update_viewport = update_viewport
     await app.async_run(async_lib='asyncio')
     app.main_widget.db.close()
 
