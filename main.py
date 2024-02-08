@@ -36,6 +36,7 @@ class MainApp(MDApp):
                 self.title = config.APP_NAME
                 self.main_widget = ChatPanel(self)
             except Exception as ex:
+                raise ex
                 error = f"{ex.__class__.__name__}: {ex}"
 
         if error:

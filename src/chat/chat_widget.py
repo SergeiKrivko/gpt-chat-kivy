@@ -20,6 +20,7 @@ from src.chat.chat_bubble import ChatBubble
 from src.gpt import async_response, simple_response
 from src.gpt.chat import GPTChat
 from src.gpt.message import GPTMessage
+from src.ui.chat_input_area import ChatInputArea
 
 
 class ChatWidget(MDScreen):
@@ -58,19 +59,7 @@ class ChatWidget(MDScreen):
         bottom_layout.md_bg_color = app.theme_cls.primary_color
         main_layout.add_widget(bottom_layout)
 
-        self.input_area = MDTextField(
-            multiline=True,
-            hint_text='Сообщение',
-            mode="rectangle",
-            size_hint_y=None,
-            # padding=4,
-        )
-        self.input_area.text_color_normal = self.app.theme_cls.bg_normal
-        self.input_area.text_color_focus = self.app.theme_cls.bg_normal
-        self.input_area.hint_text_color_normal = self.app.theme_cls.bg_normal
-        self.input_area.hint_text_color_focus = self.app.theme_cls.bg_normal
-        self.input_area.line_color_normal = self.app.theme_cls.primary_color
-        self.input_area.line_color_focus = self.app.theme_cls.bg_normal
+        self.input_area = ChatInputArea(self.app)
         bottom_layout.add_widget(self.input_area)
 
         def on_start(*args):
