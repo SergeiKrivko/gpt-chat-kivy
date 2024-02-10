@@ -24,6 +24,10 @@ class SwitchItem(MDBoxLayout):
     def set_state(self, state):
         self.switch.active = state
 
+    @property
+    def state(self):
+        return self.switch.active
+
     def _on_state_changed(self, ins, state):
         if self.on_state_changed is not None:
             self.on_state_changed(state)

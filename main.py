@@ -1,4 +1,5 @@
 import asyncio
+import sys
 
 try:
     import certifi
@@ -43,6 +44,9 @@ class MainApp(MDApp):
             main_layout.add_widget(MDLabel(text=error))
         else:
             main_layout.add_widget(self.main_widget)
+
+        if sys.platform == 'win32':
+            Window._size = [400, 700]
 
         return main_layout
 
@@ -105,7 +109,7 @@ async def main():
     app = MainApp()
     # Window.update_viewport = update_viewport
     await app.async_run(async_lib='asyncio')
-    app.main_widget.db.close()
+    app.main_widget.on_close()
 
 
 if __name__ == "__main__":

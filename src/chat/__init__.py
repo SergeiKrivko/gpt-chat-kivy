@@ -3,14 +3,15 @@ import platform
 import sys
 from typing import Union
 
-from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.app import MDApp
+from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.screenmanager import MDScreenManager
 
+from src.auth import AuthManager
 from src.chat.chat_list import ChatsList, ChatListWidgetItem
 from src.chat.chat_widget import ChatWidget
+from src.database import ChatManager
 from src.gpt.chat import GPTChat
-from src.gpt.database import Database
 from src.settings_manager import SettingsManager
 from src.ui.chat_settings_screen import ChatSettingsScreen
 from src.ui.main_settings_screen import MainSettingsScreen
@@ -31,9 +32,8 @@ class ChatPanel(MDBoxLayout):
         import g4f.Provider.helper
         g4f.Provider.helper.user_data_dir = os.path.join(app_data_dir, 'g4f')
 
-        self.db = Database(app_data_dir)
-
         self.sm = SettingsManager(app_data_dir)
+        self._chat_manager = ChatManager(self.sm)
         self.app.theme_cls.theme_style = 'Dark' if self.sm.get('dark', True) else 'Light'
         self.app.theme_cls.primary_palette = self.sm.get('theme', 'Blue')
 
@@ -42,7 +42,7 @@ class ChatPanel(MDBoxLayout):
 
         self.chat_list = ChatsList(self.app)
         self.chat_list.top_panel.on_settings_clicked = self.open_settings
-        self.chat_list.on_chat_deleted = self.delete_chat
+        self.chat_list.on_chat_deleted = self._chat_manager.delete_chat
         self._screen_manager.add_widget(self.chat_list)
         self.chat_list.top_panel.on_chat_added = self.new_chat
 
@@ -50,18 +50,27 @@ class ChatPanel(MDBoxLayout):
         self.settings_screen.on_closed = self.close_settings
         self._screen_manager.add_widget(self.settings_screen)
 
-        self.chat_settings_screen = ChatSettingsScreen(self.app)
+        self._sign_in_manager = AuthManager(self.app, self.sm, self._screen_manager)
+        self._sign_in_manager.on_auth = self.close_auth
+
+        self.chat_settings_screen = ChatSettingsScreen(self.app, self._chat_manager)
         self.chat_settings_screen.on_closed = self.close_chat_settings
         self._screen_manager.add_widget(self.chat_settings_screen)
 
         self.chat_widgets = dict()
         self.current_chat: Union[GPTChat, None] = None
 
-        for chat in self.db.chats:
-            self.add_chat(chat)
+        self._chat_manager.on_new_chat = self.add_chat
+        self._chat_manager.on_update_chat = lambda *args: None
+        self._chat_manager.on_delete_chat = self.on_chat_deleted
+        self._chat_manager.on_delete_remote_chat = lambda *args: None
+        self._chat_manager.on_new_message = self._on_new_message
+        self._chat_manager.on_delete_message = self._on_delete_message
+        if self.sm.get('user_id'):
+            self._chat_manager.auth()
 
     def add_chat(self, chat: GPTChat):
-        widget = ChatWidget(self.app, self.sm, chat)
+        widget = ChatWidget(self.app, self.sm, self._chat_manager, chat)
         widget.top_panel.on_chat_closed = self.hide_chat
         widget.top_panel.on_settings_clicked = self.open_chat_settings
         self._screen_manager.add_widget(widget)
@@ -69,16 +78,23 @@ class ChatPanel(MDBoxLayout):
         item.on_clicked = self._on_list_widget_item_clicked
         self.chat_widgets[chat.id] = widget
 
-    def delete_chat(self, chat):
-        self._screen_manager.remove_widget(self.chat_widgets[chat.id])
-        self.chat_widgets.pop(chat.id)
+    def on_chat_deleted(self, chat_id):
+        self._screen_manager.remove_widget(self.chat_widgets[chat_id])
+        self.chat_widgets.pop(chat_id)
 
     def _on_list_widget_item_clicked(self, item: ChatListWidgetItem):
         self.show_chat(item.chat)
 
     def new_chat(self):
-        chat = self.db.add_chat()
-        self.add_chat(chat)
+        self._chat_manager.new_chat()
+
+    def _on_new_message(self, chat_id, message):
+        widget = self.chat_widgets[chat_id]
+        widget.add_bubble(message)
+
+    def _on_delete_message(self, chat_id, message):
+        widget = self.chat_widgets[chat_id]
+        widget.delete_bubble(message)
 
     def show_chat(self, chat: GPTChat):
         self._screen_manager.transition.direction = 'left'
@@ -112,3 +128,9 @@ class ChatPanel(MDBoxLayout):
         self._screen_manager.current = f'Chat{self.current_chat.id}'
         self.chat_settings_screen.save_chat()
 
+    def close_auth(self):
+        self._screen_manager.current = 'Chats'
+        self._chat_manager.auth()
+
+    def on_close(self):
+        self._chat_manager.close()

@@ -13,10 +13,11 @@ from kivymd.uix.list import MDList, OneLineIconListItem, IconLeftWidget
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.scrollview import MDScrollView
 from kivymd.uix.snackbar import MDSnackbar
-from kivymd.uix.textfield import MDTextField
 from kivymd.uix.toolbar import MDTopAppBar
 
 from src.chat.chat_bubble import ChatBubble
+from src.commands import async_slot
+from src.database import ChatManager
 from src.gpt import async_response, simple_response
 from src.gpt.chat import GPTChat
 from src.gpt.message import GPTMessage
@@ -24,11 +25,12 @@ from src.ui.chat_input_area import ChatInputArea
 
 
 class ChatWidget(MDScreen):
-    def __init__(self, app: MDApp, sm, chat: GPTChat):
+    def __init__(self, app: MDApp, sm, chat_manager: ChatManager, chat: GPTChat):
         super().__init__(name=f'Chat{chat.id}')
         self.chat = chat
         self.app = app
         self.sm = sm
+        self._chat_manager = chat_manager
         self.temp_dir = self.sm.temp_dir
 
         main_layout = MDBoxLayout(orientation='vertical')
@@ -69,7 +71,7 @@ class ChatWidget(MDScreen):
         Clock.schedule_once(on_start, 2)
 
         self.button_send = MDIconButton(icon='send')
-        self.button_send.bind(on_release=self.send_message)
+        self.button_send.bind(on_release=self._send_message)
         bottom_layout.add_widget(self.button_send)
 
     def _on_resize(self, instance, height):
@@ -109,29 +111,26 @@ class ChatWidget(MDScreen):
         self._last_height = self.scroll_layout.height
         return bubble
 
-    def new_message(self, role, content):
-        message = self.chat.add_message(role, content)
-        return self.add_bubble(message)
-
-    def send_message(self, *args):
-        if self.input_area.text.strip():
-            self.new_message('user', self.input_area.text)
-            self.input_area.text = ''
-
-            messages = self.chat.messages_to_prompt([])
-            loop = asyncio.get_event_loop()
-            loop.create_task(self._send_message(messages)).done()
-
+    @async_slot
     async def _send_message(self, messages):
+        if not self.input_area.text.strip():
+            return
+
+        status = await self._chat_manager.new_message(self.chat.id, 'user', self.input_area.text)
+        if not status:
+            return
+        messages = self.chat.messages_to_prompt([])
+        self.input_area.text = ''
+
         try:
             if self.sm.get('async'):
-                task = asyncio.create_task(async_response(messages))
-                await task
-                text = task.result()
+                text = await asyncio.create_task(async_response(messages, model=self.chat.model))
             else:
-                text = simple_response(messages)
+                text = simple_response(messages, model=self.chat.model)
             print(f"Success: {repr(text)}")
-            self.new_message('assistant', text)
+
+            await self._chat_manager.new_message(self.chat.id, 'assistant', text)
+
         except Exception as ex:
             print(f"Error: {ex.__class__.__name__}: {ex}")
             MDSnackbar(
@@ -144,9 +143,11 @@ class ChatWidget(MDScreen):
             ).open()
 
     def delete_message(self, message):
+        self._chat_manager.delete_message(self.chat.id, message)
+
+    def delete_bubble(self, message):
         bubble = self._bubbles.pop(message.id)
         self._bubbles_list.remove(bubble)
-        self.chat.delete_message(message.id)
         self.scroll_layout.clear_widgets()
         for el in self._bubbles_list:
             self.scroll_layout.add_widget(el)

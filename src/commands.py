@@ -1,3 +1,5 @@
+import asyncio
+import functools
 import json
 import os
 import subprocess
@@ -91,3 +93,16 @@ def wsl_path(path: str, build):
     if path[1] == ':':
         path = f"/mnt/{path[0].lower()}{path[2:]}"
     return path
+
+
+def async_slot(func):
+    @functools.wraps(func)
+    def _run(*args, **kwargs):
+        loop = asyncio.get_event_loop()
+        loop.create_task(func(*args, **kwargs)).done()
+    return _run
+
+
+def run_async(func):
+    loop = asyncio.get_event_loop()
+    loop.create_task(func).done()

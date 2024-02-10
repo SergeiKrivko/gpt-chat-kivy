@@ -33,14 +33,13 @@ async def async_response(messages: list[dict[str: str]], model=None, **kwargs):
     print(messages)
     if model is None or model == 'default':
         model = g4f.models.default
-    task = asyncio.create_task(g4f.ChatCompletion.create_async(
+    res = await g4f.ChatCompletion.create_async(
         model=model,
         messages=messages,
         timeout=120,
         **kwargs
-    ))
-    await task
-    return task.result()
+    )
+    return res
 
 
 def try_response(messages: list[dict[str: str]], model=None, count=5, handler=None, **kwargs):

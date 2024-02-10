@@ -13,12 +13,14 @@ from kivymd.uix.toolbar import MDTopAppBar
 import g4f
 from src.gpt.chat import GPTChat
 from src.ui.select_area import SelectionItem
+from src.ui.switch_item import SwitchItem
 
 
 class ChatSettingsScreen(MDScreen):
-    def __init__(self, app: MDApp):
+    def __init__(self, app: MDApp, chat_manager):
         super().__init__(name='ChatSettings')
         self.app = app
+        self._chat_manager = chat_manager
 
         main_layout = MDBoxLayout(orientation='vertical')
         self.add_widget(main_layout)
@@ -59,6 +61,13 @@ class ChatSettingsScreen(MDScreen):
         self.temperature_edit = MDSlider(min=0, max=100, size_hint_y=None, height=dp(30))
         layout.add_widget(self.temperature_edit)
 
+        layout.add_widget(MDSeparator())
+
+        self.synchronize_item = SwitchItem("Synchronize")
+        layout.add_widget(self.synchronize_item)
+
+        layout.add_widget(MDSeparator())
+
         main_layout.add_widget(MDBoxLayout())
 
         self._chat: Union[GPTChat, None] = None
@@ -71,6 +80,7 @@ class ChatSettingsScreen(MDScreen):
         self.used_messages_edit.value = chat.used_messages
         self.saved_messages_edit.value = chat.saved_messages
         self.temperature_edit.value = int(chat.temperature * 100)
+        self.synchronize_item.set_state(bool(chat.remote_id))
 
     def save_chat(self):
         if self._chat is None:
@@ -80,4 +90,4 @@ class ChatSettingsScreen(MDScreen):
         self._chat.used_messages = self.used_messages_edit.value
         self._chat.saved_messages = self.saved_messages_edit.value
         self._chat.temperature = self.temperature_edit.value / 100
-        self._chat._db.commit()
+        self._chat_manager.make_remote(self._chat, self.synchronize_item.state)

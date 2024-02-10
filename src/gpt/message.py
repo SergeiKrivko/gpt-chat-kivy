@@ -64,6 +64,17 @@ class GPTMessage:
             self._delete()
 
     @property
+    def remote_id(self):
+        self._db.cursor.execute(f"""SELECT remote_id from Messages{self.chat_id} WHERE id = {self._id}""")
+        remote_id = self._db.cursor.fetchone()[0]
+        return remote_id
+
+    @remote_id.setter
+    def remote_id(self, remote_id):
+        self._db.cursor.execute(f"""UPDATE Messages{self.chat_id} SET remote_id = ? WHERE id = {self._id}""",
+                                (remote_id,))
+
+    @property
     def deleted(self):
         self._db.cursor.execute(f"""SELECT deleted from Messages{self.chat_id} WHERE id = {self._id}""")
         deleted = bool(self._db.cursor.fetchone()[0])
@@ -81,3 +92,12 @@ class GPTMessage:
 
     def to_json(self):
         return {'role': self.role, 'content': self.content}
+
+    def to_dict(self):
+        return {
+            'role': self.role,
+            'content': self.content,
+            'ctime': self.ctime,
+            'id': self.remote_id,
+            'reply': [m.remote_id for m in self.replys],
+        }

@@ -163,6 +163,26 @@ class GPTChat:
         self._db.cursor.execute(f"""UPDATE Chats SET temperature = {float(temperature)} WHERE id = {self._id}""")
 
     @property
+    def remote_id(self):
+        self._db.cursor.execute(f"""SELECT remote_id from Chats WHERE id = {self._id}""")
+        remote_id = self._db.cursor.fetchone()[0]
+        return remote_id
+
+    @remote_id.setter
+    def remote_id(self, remote_id):
+        self._db.cursor.execute(f"""UPDATE Chats SET remote_id = ? WHERE id = {self._id}""", (remote_id,))
+
+    @property
+    def remote_last(self):
+        self._db.cursor.execute(f"""SELECT remote_last from Chats WHERE id = {self._id}""")
+        remote_last = self._db.cursor.fetchone()[0]
+        return remote_last
+
+    @remote_last.setter
+    def remote_last(self, remote_last):
+        self._db.cursor.execute(f"""UPDATE Chats SET remote_last = {int(remote_last)} WHERE id = {self._id}""")
+
+    @property
     def model(self):
         self._db.cursor.execute(f"""SELECT model from Chats WHERE id = {self._id}""")
         model = self._db.cursor.fetchone()[0]

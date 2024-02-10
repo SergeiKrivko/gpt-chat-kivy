@@ -40,9 +40,8 @@ class ChatsList(MDScreen):
 
     def remove_item(self, item: 'ChatListWidgetItem'):
         self.list.remove_widget(item)
-        item.chat.delete()
         if self.on_chat_deleted:
-            self.on_chat_deleted(item.chat)
+            self.on_chat_deleted(item.chat.id)
         self._items.pop(item.chat.id)
 
     def update_name(self, chat):
