@@ -78,12 +78,11 @@ class SignInScreen(MDScreen):
                         self._sm.set('user_id', res['localId'])
                         self.on_sign_in()
                     else:
-                        match res.get('error', dict()).get('message'):
-                            case 'INVALID_LOGIN_CREDENTIALS':
-                                self.show_error("Неверный логин или пароль")
-                            case _:
-                                self.show_error("Неизвестная ошибка")
-                                print(res)
+                        error = res.get('error', dict()).get('message')
+                        if error == 'INVALID_LOGIN_CREDENTIALS':
+                            self.show_error("Неверный логин или пароль")
+                        else:
+                            self.show_error(f"Неизвестная ошибка: {error}")
                         self._password_edit.text = ""
         except aiohttp.ClientConnectionError:
             self.show_error("Нет подключения к интернету")

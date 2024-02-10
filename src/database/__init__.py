@@ -144,15 +144,15 @@ class ChatManager:
     def new_chat(self, chat_type=GPTChat.SIMPLE):
         chat = self._database.add_chat()
 
-        match chat_type:
-            case GPTChat.TRANSLATE:
-                chat.data['language1'] = 'russian'
-                chat.data['language2'] = 'english'
-                chat.name = f"{chat.data['language1'].capitalize()} ↔ {chat.data['language2'].capitalize()}"
-                chat.used_messages = 1
-            case GPTChat.SUMMARY:
-                chat.name = f"Краткое содержание"
-                chat.used_messages = 1
+        # match chat_type:
+        #     case GPTChat.TRANSLATE:
+        #         chat.data['language1'] = 'russian'
+        #         chat.data['language2'] = 'english'
+        #         chat.name = f"{chat.data['language1'].capitalize()} ↔ {chat.data['language2'].capitalize()}"
+        #         chat.used_messages = 1
+        #     case GPTChat.SUMMARY:
+        #         chat.name = f"Краткое содержание"
+        #         chat.used_messages = 1
 
         self.on_new_chat(chat)
 
