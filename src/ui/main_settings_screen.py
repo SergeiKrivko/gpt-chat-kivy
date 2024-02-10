@@ -1,7 +1,9 @@
 from kivy.metrics import dp
 from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.button import MDFillRoundFlatButton
 from kivymd.uix.card import MDSeparator
+from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.toolbar import MDTopAppBar
 
@@ -14,6 +16,7 @@ class MainSettingsScreen(MDScreen):
         super().__init__(name='Settings')
         self.app = app
         self.sm = sm
+        self.on_account_exit = None
 
         main_layout = MDBoxLayout(orientation='vertical')
         self.add_widget(main_layout)
@@ -48,7 +51,19 @@ class MainSettingsScreen(MDScreen):
 
         layout.add_widget(MDSeparator())
 
+        email_layout = MDBoxLayout(adaptive_height=True)
+        layout.add_widget(email_layout)
+
+        self._email_label = MDLabel()
+        email_layout.add_widget(self._email_label)
+
+        self._exit_account_button = MDFillRoundFlatButton(text='Exit', on_release=lambda *args: self.on_account_exit())
+        email_layout.add_widget(self._exit_account_button)
+
         main_layout.add_widget(MDBoxLayout())
+
+    def update_user(self):
+        self._email_label.text = self.sm.get('user_email')
 
     def set_dark_theme(self, dark):
         self.sm.set('dark', dark)

@@ -49,6 +49,7 @@ class ChatPanel(MDBoxLayout):
         self.chat_list.top_panel.on_chat_added = self.new_chat
 
         self.settings_screen = MainSettingsScreen(self.app, self.sm)
+        self.settings_screen.on_account_exit = lambda *args: self.exit_account()
         self.settings_screen.on_closed = self.close_settings
         self._screen_manager.add_widget(self.settings_screen)
 
@@ -115,6 +116,7 @@ class ChatPanel(MDBoxLayout):
 
     def open_settings(self):
         self._screen_manager.transition.direction = 'left'
+        self.settings_screen.update_user()
         self._screen_manager.current = 'Settings'
 
     def close_settings(self):
@@ -134,6 +136,16 @@ class ChatPanel(MDBoxLayout):
     def close_auth(self):
         self._screen_manager.current = 'Chats'
         self._chat_manager.auth()
+
+    def exit_account(self):
+        for chat_id in list(self.chat_widgets.keys()):
+            self._screen_manager.remove_widget(self.chat_widgets[chat_id])
+            self.chat_list.remove_chat(chat_id)
+            self.chat_widgets.pop(chat_id)
+        self.sm.set('user_id', '')
+        self.sm.set('user_token', '')
+        self.sm.set('user_refresh_token', '')
+        self._screen_manager.current = 'SignIn'
 
     def on_close(self):
         self._chat_manager.close()

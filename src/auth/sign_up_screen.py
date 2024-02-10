@@ -14,19 +14,19 @@ from src import config
 from src.commands import async_slot
 
 
-class SignInScreen(MDScreen):
+class SignUpScreen(MDScreen):
     def __init__(self, app: MDApp, sm):
-        super().__init__(name='SignIn')
+        super().__init__(name='SignUp')
         self._sm = sm
         self.app = app
-        self.on_sign_in = None
         self.on_sign_up = None
+        self.on_closed = None
 
         main_layout = MDBoxLayout(orientation='vertical')
         self.add_widget(main_layout)
 
-        self.top_bar = MDTopAppBar(title='Sign in')
-        # self.top_bar.left_action_items = [['arrow-left', lambda x: self.on_closed()]]
+        self.top_bar = MDTopAppBar(title='Sign up')
+        self.top_bar.left_action_items = [['arrow-left', lambda x: self.on_closed()]]
         main_layout.add_widget(self.top_bar)
 
         layout = MDBoxLayout(orientation='vertical', adaptive_height=True, center_y=0.5)
@@ -40,19 +40,16 @@ class SignInScreen(MDScreen):
         self._password_edit = MDTextField(hint_text='Password', password=True, password_mask='•')
         layout.add_widget(self._password_edit)
 
+        self._password_again_edit = MDTextField(hint_text='Password again', password=True, password_mask='•')
+        layout.add_widget(self._password_again_edit)
+
         self._error_label = MDLabel()
         self._error_label.text_color = self.app.theme_cls.error_color
         layout.add_widget(self._error_label)
 
-        self._button_sign_in = MDFillRoundFlatButton(text='Sign in', font_size=dp(28), padding=[dp(40), dp(10)])
-        self._button_sign_in.bind(on_release=self._sign_in)
-        layout.add_widget(self._button_sign_in)
-
-        self._button_sign_up = MDTextButton(text='Sign up', on_release=lambda *args: self.on_sign_up())
+        self._button_sign_up = MDFillRoundFlatButton(text='Sign up', font_size=dp(28), padding=[dp(40), dp(10)])
+        self._button_sign_up.bind(on_release=lambda *args: self._sign_up())
         layout.add_widget(self._button_sign_up)
-
-        self._button_reset_password = MDTextButton(text='Forget password?')
-        layout.add_widget(self._button_reset_password)
 
         main_layout.add_widget(MDBoxLayout())
 
@@ -60,16 +57,18 @@ class SignInScreen(MDScreen):
         self._error_label.text = error
 
     @async_slot
-    async def _sign_in(self, *args):
-        rest_api_url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={config.FIREBASE_API_KEY}"
+    async def _sign_up(self, *args):
+        if len(self._password_edit.text) < 6 or self._password_edit.text != self._password_again_edit.text:
+            self.show_error("Слишком короткий пароль")
+            return
 
+        rest_api_url = f"https://identitytoolkit.googleapis.com/v1/accounts:signUp?key={config.FIREBASE_API_KEY}"
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.post(rest_api_url,
                                         data=json.dumps({"email": self._email_edit.text,
                                                          "password": self._password_edit.text,
                                                          "returnSecureToken": True})) as resp:
-
                     res = await resp.text()
                     res = json.loads(res)
                     if resp.ok:
@@ -77,11 +76,11 @@ class SignInScreen(MDScreen):
                         self._sm.set('user_token', res['idToken'])
                         self._sm.set('user_refresh_token', res['refreshToken'])
                         self._sm.set('user_id', res['localId'])
-                        self.on_sign_in()
+                        self.on_sign_up()
                     else:
                         error = res.get('error', dict()).get('message')
-                        if error == 'INVALID_LOGIN_CREDENTIALS':
-                            self.show_error("Неверный логин или пароль")
+                        if error == 'EMAIL_EXISTS':
+                            self.show_error("Аккаунт уже существует")
                         else:
                             self.show_error(f"Неизвестная ошибка: {error}")
                         self._password_edit.text = ""

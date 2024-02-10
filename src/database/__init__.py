@@ -68,6 +68,8 @@ class ChatManager:
             self._events_stream = self._firebase.stream('events', self._events_handler)
 
     def _on_remote_chats(self, path, data):
+        if data is None:
+            return
         if path == '/':
             for remote_id in data:
                 self._add_remote_chat(remote_id)
