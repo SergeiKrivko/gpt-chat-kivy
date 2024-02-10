@@ -5,6 +5,8 @@ from typing import Union
 
 from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.button import MDFlatButton
+from kivymd.uix.dialog import MDDialog
 from kivymd.uix.screenmanager import MDScreenManager
 
 from src.auth import AuthManager
@@ -63,7 +65,7 @@ class ChatPanel(MDBoxLayout):
         self._chat_manager.on_new_chat = self.add_chat
         self._chat_manager.on_update_chat = lambda *args: None
         self._chat_manager.on_delete_chat = self.on_chat_deleted
-        self._chat_manager.on_delete_remote_chat = lambda *args: None
+        self._chat_manager.on_delete_remote_chat = self._on_remote_chat_deleted
         self._chat_manager.on_new_message = self._on_new_message
         self._chat_manager.on_delete_message = self._on_delete_message
         if self.sm.get('user_id'):
@@ -80,6 +82,7 @@ class ChatPanel(MDBoxLayout):
 
     def on_chat_deleted(self, chat_id):
         self._screen_manager.remove_widget(self.chat_widgets[chat_id])
+        self.chat_list.remove_chat(chat_id)
         self.chat_widgets.pop(chat_id)
 
     def _on_list_widget_item_clicked(self, item: ChatListWidgetItem):
@@ -134,3 +137,36 @@ class ChatPanel(MDBoxLayout):
 
     def on_close(self):
         self._chat_manager.close()
+
+    def _on_remote_chat_deleted(self, chat):
+        RemoteDeletedDialog(self._chat_manager, chat).open()
+
+
+class RemoteDeletedDialog(MDDialog):
+    def __init__(self, chat_manager: ChatManager, chat):
+        self._chat_manager = chat_manager
+        self._chat = chat
+        super().__init__(
+            text=f"The synchronization of the chat {chat.name} has been stopped. Delete a local copy of the chat?",
+            buttons=[
+                MDFlatButton(
+                    text="No",
+                    # theme_text_color="Custom",
+                    # text_color=self.theme_cls.primary_color,
+                    on_release=self._on_no,
+                ),
+                MDFlatButton(
+                    text="Yes",
+                    # theme_text_color="Custom",
+                    # text_color=self.theme_cls.primary_color,
+                    on_release=self._on_yes,
+                ),
+            ])
+
+    def _on_yes(self, *args):
+        self._chat_manager.delete_chat(self._chat.id)
+        self.dismiss()
+
+    def _on_no(self, *args):
+        self._chat.remote_id = None
+        self.dismiss()

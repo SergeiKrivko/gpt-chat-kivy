@@ -38,6 +38,13 @@ class ChatsList(MDScreen):
         self._items[chat.id] = item
         return item
 
+    def remove_chat(self, chat_id):
+        for item in self._items.values():
+            if item.chat.id == chat_id:
+                self.list.remove_widget(item)
+                self._items.pop(item.chat.id)
+                break
+
     def remove_item(self, item: 'ChatListWidgetItem'):
         self.list.remove_widget(item)
         if self.on_chat_deleted:

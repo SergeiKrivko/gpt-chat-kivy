@@ -75,7 +75,9 @@ class ChatManager:
         else:
             remote_id = path[1:]
             if data is None:
-                self.on_delete_remote_chat(self._database.get_by_remote_id(remote_id))
+                chat = self._database.get_by_remote_id(remote_id)
+                if chat and chat.remote_id:
+                    self.on_delete_remote_chat(chat)
             else:
                 self._add_remote_chat(remote_id)
 
@@ -83,6 +85,8 @@ class ChatManager:
     async def _add_remote_chat(self, remote_id):
         chat = self._database.get_by_remote_id(remote_id)
         data = await self._firebase.get(f'chats/{remote_id}')
+        if data is None:
+            return
         if chat is None:
             chat = self._database.add_chat()
             chat.remote_id = remote_id

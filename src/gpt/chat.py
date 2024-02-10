@@ -176,6 +176,8 @@ class GPTChat:
     def remote_last(self):
         self._db.cursor.execute(f"""SELECT remote_last from Chats WHERE id = {self._id}""")
         remote_last = self._db.cursor.fetchone()[0]
+        if remote_last is None:
+            remote_last = 0
         return remote_last
 
     @remote_last.setter
