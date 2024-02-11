@@ -18,6 +18,9 @@ try:
     Window.keyboard_anim_args = {"d": .2, "t": "in_out_expo"}
     Window.softinput_mode = "below_target"
 
+    if sys.platform == 'win32':
+        Window._size = [400, 700]
+
     from src import config
     from src.chat import ChatPanel
 except Exception as ex:
@@ -35,7 +38,9 @@ class MainApp(MDApp):
         if not error:
             try:
                 self.title = config.APP_NAME
+                self.theme_cls.dynamic_color = True
                 self.main_widget = ChatPanel(self)
+                self.bind(on_start=self.main_widget.set_theme)
             except Exception as ex:
                 raise ex
                 error = f"{ex.__class__.__name__}: {ex}"
@@ -44,9 +49,6 @@ class MainApp(MDApp):
             main_layout.add_widget(MDLabel(text=error))
         else:
             main_layout.add_widget(self.main_widget)
-
-        if sys.platform == 'win32':
-            Window._size = [400, 700]
 
         return main_layout
 

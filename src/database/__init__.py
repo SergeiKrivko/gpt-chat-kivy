@@ -161,6 +161,7 @@ class ChatManager:
         #         chat.used_messages = 1
 
         self.on_new_chat(chat)
+        return chat
 
     @async_slot
     async def delete_chat(self, chat_id):

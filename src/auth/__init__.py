@@ -49,3 +49,8 @@ class AuthManager:
         else:
             self._screen_manager.transition.direction = 'left'
         self._screen_manager.current = screen
+
+    def set_theme(self):
+        self._sign_in_screen.set_theme()
+        self._sign_up_screen.set_theme()
+        self._verify_email_screen.set_theme()

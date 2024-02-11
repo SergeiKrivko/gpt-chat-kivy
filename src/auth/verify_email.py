@@ -5,11 +5,9 @@ import aiohttp
 from kivy.metrics import dp
 from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.button import MDFillRoundFlatButton, MDTextButton
 from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
-from kivymd.uix.textfield import MDTextField
-from kivymd.uix.toolbar import MDTopAppBar
+from kivymd.uix.appbar import MDTopAppBar, MDTopAppBarTitle, MDTopAppBarLeadingButtonContainer, MDActionTopAppBarButton
 
 from src import config
 from src.commands import async_slot
@@ -23,13 +21,18 @@ class VerifyEmailScreen(MDScreen):
         self.on_verified = None
         self.on_close = None
         self._email_waiting = False
+        self.theme_bg_color = 'Custom'
+
+        self.top_bar = MDTopAppBar(MDTopAppBarTitle(text='Email verification'),
+                                   MDTopAppBarLeadingButtonContainer(
+                                       MDActionTopAppBarButton(
+                                           icon='arrow-left',
+                                           on_release=lambda x: self.close())
+                                   ), theme_bg_color='Custom')
+        self.add_widget(self.top_bar)
 
         main_layout = MDBoxLayout(orientation='vertical')
         self.add_widget(main_layout)
-
-        self.top_bar = MDTopAppBar(title='Email verification')
-        self.top_bar.left_action_items = [['arrow-left', lambda x: self.close()]]
-        main_layout.add_widget(self.top_bar)
 
         layout = MDBoxLayout(orientation='vertical', adaptive_height=True, center_y=0.5)
         layout.padding = dp(20)
@@ -92,3 +95,7 @@ class VerifyEmailScreen(MDScreen):
     def close(self):
         self._email_waiting = False
         self.on_close()
+
+    def set_theme(self):
+        self.md_bg_color = self.theme_cls.backgroundColor
+        self.top_bar.md_bg_color = self.theme_cls.primaryContainerColor

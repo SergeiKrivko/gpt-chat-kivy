@@ -1,10 +1,11 @@
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.app import MDApp
 from kivymd.uix.card import MDCardSwipe, MDCardSwipeLayerBox, MDCardSwipeFrontBox
-from kivymd.uix.list import MDList, OneLineListItem
+from kivymd.uix.list import MDList, MDListItem, MDListItemHeadlineText
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.scrollview import MDScrollView
-from kivymd.uix.toolbar import MDTopAppBar, MDBottomAppBar
+from kivymd.uix.appbar import MDTopAppBar, MDTopAppBarTitle, MDTopAppBarTrailingButtonContainer, \
+    MDActionTopAppBarButton, MDTopAppBarLeadingButtonContainer
 
 from src.gpt.chat import GPTChat
 
@@ -13,6 +14,7 @@ class ChatsList(MDScreen):
     def __init__(self, app):
         super().__init__(name='Chats')
         self.app = app
+        self.theme_bg_color = 'Custom'
 
         main_layout = MDBoxLayout(orientation='vertical')
         self.add_widget(main_layout)
@@ -25,8 +27,6 @@ class ChatsList(MDScreen):
         main_layout.add_widget(self.scroll_view)
         self.list = MDList()
         self.scroll_view.add_widget(self.list)
-
-        # main_layout.add_widget(MDTopAppBar())
 
         self.on_chat_deleted = None
         self._items = dict()
@@ -54,6 +54,12 @@ class ChatsList(MDScreen):
     def update_name(self, chat):
         self._items[chat.id].update_name()
 
+    def set_theme(self):
+        self.md_bg_color = self.theme_cls.backgroundColor
+        self.top_panel.md_bg_color = self.theme_cls.primaryContainerColor
+        for item in self._items.values():
+            item.set_theme()
+
 
 class ChatListWidgetItem(MDCardSwipe):
     def __init__(self, app: MDApp, chat: GPTChat):
@@ -62,10 +68,10 @@ class ChatListWidgetItem(MDCardSwipe):
         self.size_hint_y: None
         self.adaptive_height = True
         self.radius = 0
+        self.theme_bg_color = 'Custom'
 
-        self.back_box = MDCardSwipeLayerBox()
+        self.back_box = MDCardSwipeLayerBox(theme_bg_color='Custom')
         self.add_widget(self.back_box)
-        self.back_box.bg_color = self.app.theme_cls.bg_normal
 
         self.front_box = MDCardSwipeFrontBox()
         self.front_box.radius = 0
@@ -74,10 +80,12 @@ class ChatListWidgetItem(MDCardSwipe):
 
         self.chat = chat
 
-        self.list_item = OneLineListItem()
+        self.list_item = MDListItem(item_text := MDListItemHeadlineText(),
+                                    on_press=lambda *args: self._set_pressed(True), on_release=self._on_released,
+                                    ripple_effect=False, theme_bg_color='Custom')
+        self.list_item_text = item_text
+
         self.update_name()
-        self.list_item._no_ripple_effect = True
-        self.list_item.bind(on_press=lambda *args: self._set_pressed(True), on_release=self._on_released)
         self.bind(on_touch_move=lambda *args: self._set_pressed(False))
         self.front_box.add_widget(self.list_item)
 
@@ -94,7 +102,7 @@ class ChatListWidgetItem(MDCardSwipe):
                 name = "<Новый диалог>"
             else:
                 name = self.chat.last_message.content
-        self.list_item.text = name
+        self.list_item_text.text = name
 
     def _set_pressed(self, flag):
         self._pressed = flag
@@ -108,10 +116,25 @@ class ChatListWidgetItem(MDCardSwipe):
         if self.on_deleted is not None:
             self.on_deleted(self)
 
+    def set_theme(self):
+        self.back_box.bg_color = self.app.theme_cls.surfaceColor
+        self.list_item.bg_color = self.app.theme_cls.primaryColor
+
 
 class ListTopPanel(MDTopAppBar):
     def __init__(self):
-        super().__init__()
-        self.title = "Chats"
-        self.left_action_items = [['plus', lambda x: None if self.on_chat_added is None else self.on_chat_added()]]
-        self.right_action_items = [['dots-horizontal', lambda x: self.on_settings_clicked()]]
+        self.on_chat_added = None
+        self.on_settings_clicked = None
+        super().__init__(
+            MDTopAppBarLeadingButtonContainer(
+                MDActionTopAppBarButton(
+                    icon='plus',
+                    on_release=lambda x: None if self.on_chat_added is None else self.on_chat_added())
+            ),
+            MDTopAppBarTitle(text='Chats'),
+            MDTopAppBarTrailingButtonContainer(
+                MDActionTopAppBarButton(
+                    icon='dots-horizontal',
+                    on_release=lambda x: None if self.on_settings_clicked is None else self.on_settings_clicked())
+            ))
+        self.theme_bg_color = 'Custom'

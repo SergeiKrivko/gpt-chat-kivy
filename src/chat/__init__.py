@@ -1,3 +1,4 @@
+import asyncio
 import os
 import platform
 import sys
@@ -5,13 +6,14 @@ from typing import Union
 
 from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.button import MDFlatButton
+from kivymd.uix.button import MDButton, MDButtonText
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.screenmanager import MDScreenManager
 
 from src.auth import AuthManager
 from src.chat.chat_list import ChatsList, ChatListWidgetItem
 from src.chat.chat_widget import ChatWidget
+from src.commands import async_slot
 from src.database import ChatManager
 from src.gpt.chat import GPTChat
 from src.settings_manager import SettingsManager
@@ -36,7 +38,8 @@ class ChatPanel(MDBoxLayout):
 
         self.sm = SettingsManager(app_data_dir)
         self._chat_manager = ChatManager(self.sm)
-        self.app.theme_cls.theme_style = 'Dark' if self.sm.get('dark', True) else 'Light'
+        if not self.sm.get('dark', True):
+            self.theme_cls.switch_theme()
         self.app.theme_cls.primary_palette = self.sm.get('theme', 'Blue')
 
         self._screen_manager = MDScreenManager()
@@ -51,6 +54,7 @@ class ChatPanel(MDBoxLayout):
         self.settings_screen = MainSettingsScreen(self.app, self.sm)
         self.settings_screen.on_account_exit = lambda *args: self.exit_account()
         self.settings_screen.on_closed = self.close_settings
+        self.settings_screen.on_color_changed = self.set_theme
         self._screen_manager.add_widget(self.settings_screen)
 
         self._sign_in_manager = AuthManager(self.app, self.sm, self._screen_manager)
@@ -89,8 +93,11 @@ class ChatPanel(MDBoxLayout):
     def _on_list_widget_item_clicked(self, item: ChatListWidgetItem):
         self.show_chat(item.chat)
 
-    def new_chat(self):
-        self._chat_manager.new_chat()
+    @async_slot
+    async def new_chat(self):
+        chat = self._chat_manager.new_chat()
+        await asyncio.sleep(0.6)
+        self.show_chat(chat)
 
     def _on_new_message(self, chat_id, message):
         widget = self.chat_widgets[chat_id]
@@ -104,6 +111,7 @@ class ChatPanel(MDBoxLayout):
         self._screen_manager.transition.direction = 'left'
         self._screen_manager.current = f'Chat{chat.id}'
         self.chat_widgets[chat.id].load_messages()
+        self.chat_widgets[chat.id].set_theme()
         self.current_chat = chat
 
     def hide_chat(self):
@@ -153,6 +161,14 @@ class ChatPanel(MDBoxLayout):
     def _on_remote_chat_deleted(self, chat):
         RemoteDeletedDialog(self._chat_manager, chat).open()
 
+    @async_slot
+    async def set_theme(self, *args):
+        await asyncio.sleep(0.2)
+        self.chat_list.set_theme()
+        self.settings_screen.set_theme()
+        self.chat_settings_screen.set_theme()
+        self._sign_in_manager.set_theme()
+
 
 class RemoteDeletedDialog(MDDialog):
     def __init__(self, chat_manager: ChatManager, chat):
@@ -161,16 +177,12 @@ class RemoteDeletedDialog(MDDialog):
         super().__init__(
             text=f"The synchronization of the chat {chat.name} has been stopped. Delete a local copy of the chat?",
             buttons=[
-                MDFlatButton(
-                    text="No",
-                    # theme_text_color="Custom",
-                    # text_color=self.theme_cls.primary_color,
+                MDButton(
+                    MDButtonText(text="No"),
                     on_release=self._on_no,
                 ),
-                MDFlatButton(
-                    text="Yes",
-                    # theme_text_color="Custom",
-                    # text_color=self.theme_cls.primary_color,
+                MDButton(
+                    MDButtonText(text="Yes"),
                     on_release=self._on_yes,
                 ),
             ])

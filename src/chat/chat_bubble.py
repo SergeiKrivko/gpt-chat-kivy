@@ -1,13 +1,11 @@
 from typing import Union
 
-from kivy.uix.image import Image
 from kivy.uix.widget import Widget
 from kivymd.app import MDApp
 from kivymd.material_resources import dp
 from kivymd.uix.behaviors import StencilBehavior, TouchBehavior
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.label import MDLabel
-from kivymd.uix.menu import MDDropdownMenu
 
 from src.gpt.message import GPTMessage
 
@@ -26,12 +24,6 @@ class ChatBubble(MDBoxLayout, StencilBehavior, TouchBehavior):
         self.padding = dp(10)
         self.spacing = dp(5)
         self.size_hint_x = 0.8
-        if self.side == 'right':
-            self.md_bg_color = self.app.theme_cls.primary_dark if self.app.theme_cls.theme_style == 'Dark' else \
-                self.app.theme_cls.primary_light
-        else:
-            self.md_bg_color = self.app.theme_cls.bg_light if self.app.theme_cls.theme_style == 'Dark' else \
-                self.app.theme_cls.bg_darkest
         self.radius = (dp(10), dp(10), 0 if self.side == 'right' else dp(10), 0 if self.side == 'left' else dp(10))
         self.pos_hint = {'center_x': 0.4 if self.side == 'left' else 0.6}
 
@@ -48,6 +40,7 @@ class ChatBubble(MDBoxLayout, StencilBehavior, TouchBehavior):
 
         self._last_items = dict()
         self._apply_text()
+        self.set_theme()
 
     def on_long_touch(self, *args):
         # self.menu.open()
@@ -217,6 +210,12 @@ class ChatBubble(MDBoxLayout, StencilBehavior, TouchBehavior):
         self.add_widget(label)
 
         return True
+
+    def set_theme(self):
+        if self.side == 'right':
+            self.md_bg_color = self.app.theme_cls.primaryContainerColor
+        else:
+            self.md_bg_color = self.app.theme_cls.secondaryContainerColor
 
 
 def _count_in_start(line, symbol):
