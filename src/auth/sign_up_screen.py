@@ -48,15 +48,14 @@ class SignUpScreen(MDScreen):
         self._password_again_edit = MDTextField(MDTextFieldHintText(text='Password again'), password=True, password_mask='•')
         layout.add_widget(self._password_again_edit)
 
-        self._error_label = MDLabel()
-        self._error_label.text_color = self.app.theme_cls.errorColor
+        self._error_label = MDLabel(theme_text_color='Custom')
         layout.add_widget(self._error_label)
 
         self._button_sign_up = MDButton(MDButtonText(text='Sign up', theme_font_size='Custom', font_size=dp(28),
                                                      padding=[dp(40), dp(30)]),
                                         width=dp(200), height=dp(50), on_release=self._sign_up, style='filled')
         self._button_sign_up.bind(on_release=lambda *args: self._sign_up())
-        layout.add_widget(self._button_sign_up)
+        layout.add_widget(MDBoxLayout(MDBoxLayout(), self._button_sign_up, MDBoxLayout(), adaptive_height=True))
 
         main_layout.add_widget(MDBoxLayout())
 
@@ -66,8 +65,13 @@ class SignUpScreen(MDScreen):
 
     @async_slot
     async def _sign_up(self, *args):
-        if len(self._password_edit.text) < 6 or self._password_edit.text != self._password_again_edit.text:
-            self.show_error("Слишком короткий пароль")
+        if not self._error_label.text:
+            self.show_error("Please enter email")
+        if len(self._password_edit.text) < 6:
+            self.show_error("The password is too short")
+            return
+        if self._password_edit.text != self._password_again_edit.text:
+            self.show_error("Passwords don't match")
             return
 
         rest_api_url = f"https://identitytoolkit.googleapis.com/v1/accounts:signUp?key={config.FIREBASE_API_KEY}"
@@ -88,13 +92,14 @@ class SignUpScreen(MDScreen):
                     else:
                         error = res.get('error', dict()).get('message')
                         if error == 'EMAIL_EXISTS':
-                            self.show_error("Аккаунт уже существует")
+                            self.show_error("The account already exists")
                         else:
-                            self.show_error(f"Неизвестная ошибка: {error}")
+                            self.show_error(f"Unknown error: {error}")
                         self._password_edit.text = ""
         except aiohttp.ClientConnectionError:
-            self.show_error("Нет подключения к интернету")
+            self.show_error("No internet connection")
 
     def set_theme(self):
         self.md_bg_color = self.theme_cls.backgroundColor
+        self._error_label.text_color = self.app.theme_cls.errorColor
         self.top_bar.md_bg_color = self.theme_cls.primaryContainerColor

@@ -1,5 +1,7 @@
+from kivy.metrics import dp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.app import MDApp
+from kivymd.uix.button import MDButton, MDButtonIcon
 from kivymd.uix.card import MDCardSwipe, MDCardSwipeLayerBox, MDCardSwipeFrontBox
 from kivymd.uix.list import MDList, MDListItem, MDListItemHeadlineText
 from kivymd.uix.screen import MDScreen
@@ -70,6 +72,8 @@ class ChatListWidgetItem(MDCardSwipe):
         self.radius = 0
         self.theme_bg_color = 'Custom'
 
+        # self.back_box = MDCardSwipeLayerBox(MDButton(MDButtonIcon(icon='trash-can'), center_y=0.5, ripple_effect=False),
+        #                                     theme_bg_color='Custom', padding=dp(8))
         self.back_box = MDCardSwipeLayerBox(theme_bg_color='Custom')
         self.add_widget(self.back_box)
 
@@ -94,6 +98,7 @@ class ChatListWidgetItem(MDCardSwipe):
         self.on_deleted = None
         self.on_clicked = None
         self._pressed = False
+        self.set_theme()
 
     def update_name(self):
         name = self.chat.name
@@ -117,8 +122,9 @@ class ChatListWidgetItem(MDCardSwipe):
             self.on_deleted(self)
 
     def set_theme(self):
-        self.back_box.bg_color = self.app.theme_cls.surfaceColor
-        self.list_item.bg_color = self.app.theme_cls.primaryColor
+        self.back_box.md_bg_color = self.app.theme_cls.surfaceColor
+        self.list_item.md_bg_color = self.app.theme_cls.secondaryContainerColor
+        self.front_box.md_bg_color = self.app.theme_cls.secondaryContainerColor
 
 
 class ListTopPanel(MDTopAppBar):

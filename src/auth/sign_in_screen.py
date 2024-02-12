@@ -40,21 +40,20 @@ class SignInScreen(MDScreen):
         self._password_edit = MDTextField(MDTextFieldHintText(text='Password'), password=True, password_mask='•')
         layout.add_widget(self._password_edit)
 
-        self._error_label = MDLabel()
-        self._error_label.text_color = self.app.theme_cls.errorColor
+        self._error_label = MDLabel(theme_text_color='Custom')
         layout.add_widget(self._error_label)
 
         self._button_sign_in = MDButton(MDButtonText(text='Sign in', theme_font_size='Custom', font_size=dp(28),
                                                      padding=[dp(40), dp(30)]),
                                         width=dp(200), height=dp(50), on_release=self._sign_in, style='filled')
-        layout.add_widget(self._button_sign_in)
+        layout.add_widget(MDBoxLayout(MDBoxLayout(), self._button_sign_in, MDBoxLayout(), adaptive_height=True))
 
         self._button_sign_up = MDButton(MDButtonText(text='Sign up'), style='text',
                                         on_release=lambda *args: self.on_sign_up())
-        layout.add_widget(self._button_sign_up)
+        layout.add_widget(MDBoxLayout(MDBoxLayout(), self._button_sign_up, MDBoxLayout(), adaptive_height=True))
 
         self._button_reset_password = MDButton(MDButtonText(text='Forget password?'), style='text')
-        layout.add_widget(self._button_reset_password)
+        layout.add_widget(MDBoxLayout(MDBoxLayout(), self._button_reset_password, MDBoxLayout(), adaptive_height=True))
 
         main_layout.add_widget(MDBoxLayout())
 
@@ -63,6 +62,13 @@ class SignInScreen(MDScreen):
 
     @async_slot
     async def _sign_in(self, *args):
+        if not self._email_edit.text:
+            self.show_error("Please enter email")
+            return
+        if not self._password_edit.text:
+            self.show_error("Please enter password")
+            return
+
         rest_api_url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={config.FIREBASE_API_KEY}"
 
         try:
@@ -83,13 +89,14 @@ class SignInScreen(MDScreen):
                     else:
                         error = res.get('error', dict()).get('message')
                         if error == 'INVALID_LOGIN_CREDENTIALS':
-                            self.show_error("Неверный логин или пароль")
+                            self.show_error("Invalid username or password")
                         else:
-                            self.show_error(f"Неизвестная ошибка: {error}")
+                            self.show_error(f"Unknown error: {error}")
                         self._password_edit.text = ""
         except aiohttp.ClientConnectionError:
-            self.show_error("Нет подключения к интернету")
+            self.show_error("No internet connection")
 
     def set_theme(self):
         self.md_bg_color = self.theme_cls.backgroundColor
+        self._error_label.text_color = self.app.theme_cls.errorColor
         self.top_bar.md_bg_color = self.theme_cls.primaryContainerColor
