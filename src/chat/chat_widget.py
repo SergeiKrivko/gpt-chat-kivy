@@ -7,7 +7,7 @@ from kivymd.app import MDApp
 from kivymd.material_resources import dp
 from kivymd.uix.bottomsheet import MDBottomSheet
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.button import MDIconButton
+from kivymd.uix.button import MDIconButton, MDButton
 from kivymd.uix.label import MDLabel
 from kivymd.uix.list import MDList, MDListItem, MDListItemLeadingIcon, MDListItemHeadlineText
 from kivymd.uix.screen import MDScreen
@@ -51,7 +51,7 @@ class ChatWidget(MDScreen):
         self.scroll_layout.bind(minimum_height=self._on_resize)
         self.scroll_view.add_widget(self.scroll_layout)
         self.scroll_view.on_scroll = self.on_scroll
-        self._bubbles_list = []
+        self._bubbles_list: list[ChatBubble] = []
         self._bubbles = dict()
         self._to_bottom = True
         self.scroll_view.scroll_y = 0
@@ -72,6 +72,9 @@ class ChatWidget(MDScreen):
         self.button_send = MDIconButton(icon='send')
         self.button_send.bind(on_release=self._send_message)
         self._bottom_layout.add_widget(self.button_send)
+
+        # self._button_down = MDIconButton(icon='down_arrow', parent=self,
+        #                                  pos=[self.width - dp(50), self.height - dp(150)])
 
     def _on_resize(self, instance, height):
         self.scroll_layout.setter('height')(instance, height)
@@ -152,6 +155,14 @@ class ChatWidget(MDScreen):
         self.scroll_layout.clear_widgets()
         for el in self._bubbles_list:
             self.scroll_layout.add_widget(el)
+
+    def drop_messages(self):
+        y = self.scroll_view.scroll_y * (self.scroll_layout.height - self.scroll_view.height) + self.scroll_view.height
+        for el in self._bubbles_list:
+            if el.top <= y:
+                for message in self.chat.drop_messages(el.message.id):
+                    self.delete_bubble(message)
+                break
 
     def set_theme(self):
         self.top_panel.md_bg_color = self.app.theme_cls.primaryContainerColor

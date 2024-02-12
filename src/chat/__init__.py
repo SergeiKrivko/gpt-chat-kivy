@@ -117,6 +117,7 @@ class ChatPanel(MDBoxLayout):
     def hide_chat(self):
         if self.current_chat is None:
             return
+        self.chat_widgets[self.current_chat.id].drop_messages()
         self._screen_manager.transition.direction = 'right'
         self._screen_manager.current = 'Chats'
         self.chat_list.update_name(self.current_chat)
