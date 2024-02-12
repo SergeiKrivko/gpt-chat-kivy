@@ -51,7 +51,7 @@ class ChatWidget(MDScreen):
         self.scroll_layout.bind(minimum_height=self._on_resize)
         self.scroll_view.add_widget(self.scroll_layout)
         self.scroll_view.on_scroll = self.on_scroll
-        self._bubbles_list: list[ChatBubble] = []
+        self._bubbles_list = []
         self._bubbles = dict()
         self._to_bottom = True
         self.scroll_view.scroll_y = 0
