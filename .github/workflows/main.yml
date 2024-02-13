@@ -115,141 +115,141 @@ jobs:
 #          ls
 #          ls ./bin
 
-  build-ios-11:
-    name: Build for iOS
-    runs-on: macos-11
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          path: master
-
-      - name: Install dependencies
-        run: |
-          python3.11 -m pip install --upgrade pip virtualenv
-  
-          cd /Users/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
-          python3.11 -m venv venv
-          source venv/bin/activate
-  
-          venv/bin/python3.11 -m pip install --upgrade kivy-ios buildozer
-          venv/bin/python3.11 -m pip install --upgrade Cython==0.29.36
-  
-          brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer gstreamer automake cython
-
-      - name: Build with buildozer
-        run: |
-          cd /Users/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
-          source venv/bin/activate
-          venv/bin/python3.11 -m buildozer ios debug
-
-      - name: LS
-        run: |
-          ls
-          ls ./bin
-
-
-  build-ios-12:
-    name: Build for iOS
-    runs-on: macos-12
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          path: master
-
-      - name: Install dependencies
-        run: |
-          python3.11 -m pip install --upgrade pip virtualenv
-  
-          cd /Users/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
-          python3.11 -m venv venv
-          source venv/bin/activate
-  
-          venv/bin/python3.11 -m pip install --upgrade kivy-ios buildozer
-          venv/bin/python3.11 -m pip install --upgrade Cython==0.29.36
-  
-          brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer gstreamer automake cython
-
-      - name: Build with buildozer
-        run: |
-          cd /Users/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
-          source venv/bin/activate
-          venv/bin/python3.11 -m buildozer ios debug
-
-      - name: LS
-        run: |
-          ls
-          ls ./bin
-
-
-  build-ios-13:
-    name: Build for iOS
-    runs-on: macos-13
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          path: master
-
-      - name: Install dependencies
-        run: |
-          python3.11 -m pip install --upgrade pip virtualenv
-  
-          cd /Users/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
-          python3.11 -m venv venv
-          source venv/bin/activate
-  
-          venv/bin/python3.11 -m pip install --upgrade kivy-ios buildozer
-          venv/bin/python3.11 -m pip install --upgrade Cython==0.29.36
-  
-          brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer gstreamer automake cython
-
-      - name: Build with buildozer
-        run: |
-          cd /Users/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
-          source venv/bin/activate
-          venv/bin/python3.11 -m buildozer ios debug
-
-      - name: LS
-        run: |
-          ls
-          ls ./bin
-
-
-  build-ios-14:
-    name: Build for iOS
-    runs-on: macos-14
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          path: master
-
-      - name: Install dependencies
-        run: |
-          python3.11 -m pip install --upgrade pip virtualenv
-  
-          cd /Users/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
-          python3.11 -m venv venv
-          source venv/bin/activate
-  
-          venv/bin/python3.11 -m pip install --upgrade kivy-ios buildozer
-          venv/bin/python3.11 -m pip install --upgrade Cython==0.29.36
-  
-          brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer gstreamer automake cython
-
-      - name: Build with buildozer
-        run: |
-          cd /Users/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
-          source venv/bin/activate
-          venv/bin/python3.11 -m buildozer ios debug
-
-      - name: LS
-        run: |
-          ls
-          ls ./bin
+#  build-ios-11:
+#    name: Build for iOS
+#    runs-on: macos-11
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#        with:
+#          path: master
+#
+#      - name: Install dependencies
+#        run: |
+#          python3.11 -m pip install --upgrade pip virtualenv
+#
+#          cd /Users/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
+#          python3.11 -m venv venv
+#          source venv/bin/activate
+#
+#          venv/bin/python3.11 -m pip install --upgrade kivy-ios buildozer
+#          venv/bin/python3.11 -m pip install --upgrade Cython==0.29.36
+#
+#          brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer gstreamer automake cython
+#
+#      - name: Build with buildozer
+#        run: |
+#          cd /Users/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
+#          source venv/bin/activate
+#          venv/bin/python3.11 -m buildozer ios debug
+#
+#      - name: LS
+#        run: |
+#          ls
+#          ls ./bin
+#
+#
+#  build-ios-12:
+#    name: Build for iOS
+#    runs-on: macos-12
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#        with:
+#          path: master
+#
+#      - name: Install dependencies
+#        run: |
+#          python3.11 -m pip install --upgrade pip virtualenv
+#
+#          cd /Users/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
+#          python3.11 -m venv venv
+#          source venv/bin/activate
+#
+#          venv/bin/python3.11 -m pip install --upgrade kivy-ios buildozer
+#          venv/bin/python3.11 -m pip install --upgrade Cython==0.29.36
+#
+#          brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer gstreamer automake cython
+#
+#      - name: Build with buildozer
+#        run: |
+#          cd /Users/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
+#          source venv/bin/activate
+#          venv/bin/python3.11 -m buildozer ios debug
+#
+#      - name: LS
+#        run: |
+#          ls
+#          ls ./bin
+#
+#
+#  build-ios-13:
+#    name: Build for iOS
+#    runs-on: macos-13
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#        with:
+#          path: master
+#
+#      - name: Install dependencies
+#        run: |
+#          python3.11 -m pip install --upgrade pip virtualenv
+#
+#          cd /Users/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
+#          python3.11 -m venv venv
+#          source venv/bin/activate
+#
+#          venv/bin/python3.11 -m pip install --upgrade kivy-ios buildozer
+#          venv/bin/python3.11 -m pip install --upgrade Cython==0.29.36
+#
+#          brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer gstreamer automake cython
+#
+#      - name: Build with buildozer
+#        run: |
+#          cd /Users/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
+#          source venv/bin/activate
+#          venv/bin/python3.11 -m buildozer ios debug
+#
+#      - name: LS
+#        run: |
+#          ls
+#          ls ./bin
+#
+#
+#  build-ios-14:
+#    name: Build for iOS
+#    runs-on: macos-14
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#        with:
+#          path: master
+#
+#      - name: Install dependencies
+#        run: |
+#          python3.11 -m pip install --upgrade pip virtualenv
+#
+#          cd /Users/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
+#          python3.11 -m venv venv
+#          source venv/bin/activate
+#
+#          venv/bin/python3.11 -m pip install --upgrade kivy-ios buildozer
+#          venv/bin/python3.11 -m pip install --upgrade Cython==0.29.36
+#
+#          brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer gstreamer automake cython
+#
+#      - name: Build with buildozer
+#        run: |
+#          cd /Users/runner/work/gpt-chat-kivy/gpt-chat-kivy/master
+#          source venv/bin/activate
+#          venv/bin/python3.11 -m buildozer ios debug
+#
+#      - name: LS
+#        run: |
+#          ls
+#          ls ./bin
