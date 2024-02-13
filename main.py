@@ -25,6 +25,7 @@ try:
     from src.chat import ChatPanel
 except Exception as ex:
     error = f"{ex.__class__.__name__}: {ex}"
+    print(error)
 else:
     error = ''
 

@@ -179,7 +179,7 @@ class ChatManager:
         chat.delete()
         self.on_delete_chat(chat_id)
 
-    async def new_message(self, chat_id: int, role, content, reply: list | tuple = tuple()):
+    async def new_message(self, chat_id: int, role, content, reply=tuple()):
         chat = self._database.get_chat(chat_id)
         message = chat.add_message(role, content, reply)
 
