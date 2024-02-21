@@ -22,6 +22,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install --upgrade Cython==3.0.0
+          rm -rf  ~/.gradle
 
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
